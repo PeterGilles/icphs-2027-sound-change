@@ -6,9 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Peter Gilles">
 <meta name="dcterms.date" content="2026-10-07">
 
-<title>Paper figures: average trajectories &amp; three-block age functional regression</title>
+<title>Analyses and figures for “TRACING SOUND CHANGE WITH DCT-SMOOTHS AND BAYESIAN REGRESSION: THE CASE OF LUXEMBOURGISH VOWELS”, ICPhS 2027</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -111,9 +112,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#spectral-rate" id="toc-spectral-rate" class="nav-link" data-scroll-target="#spectral-rate"><span class="header-section-number">5.4</span> Spectral rate</a></li>
   <li><a href="#position-versus-amount-of-movement" id="toc-position-versus-amount-of-movement" class="nav-link" data-scroll-target="#position-versus-amount-of-movement"><span class="header-section-number">5.5</span> Position versus amount of movement</a></li>
   </ul></li>
-  <li><a href="#do-the-dynamics-add-age-information-beyond-the-midpoint" id="toc-do-the-dynamics-add-age-information-beyond-the-midpoint" class="nav-link" data-scroll-target="#do-the-dynamics-add-age-information-beyond-the-midpoint"><span class="header-section-number">6</span> Do the dynamics add age information beyond the midpoint?</a></li>
-  <li><a href="#individual-speakers-and-the-community-change" id="toc-individual-speakers-and-the-community-change" class="nav-link" data-scroll-target="#individual-speakers-and-the-community-change"><span class="header-section-number">7</span> Individual speakers and the community change</a></li>
-  <li><a href="#covariation-across-vowels-principal-components-of-speaker-intercepts" id="toc-covariation-across-vowels-principal-components-of-speaker-intercepts" class="nav-link" data-scroll-target="#covariation-across-vowels-principal-components-of-speaker-intercepts"><span class="header-section-number">8</span> Covariation across vowels: principal components of speaker intercepts</a></li>
+  <li><a href="#individual-speakers-and-the-community-change" id="toc-individual-speakers-and-the-community-change" class="nav-link" data-scroll-target="#individual-speakers-and-the-community-change"><span class="header-section-number">6</span> Individual speakers and the community change</a></li>
   </ul>
 </nav>
 </div>
@@ -121,13 +120,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Paper figures: average trajectories &amp; three-block age functional regression</h1>
+<h1 class="title">Analyses and figures for “TRACING SOUND CHANGE WITH DCT-SMOOTHS AND BAYESIAN REGRESSION: THE CASE OF LUXEMBOURGISH VOWELS”, ICPhS 2027</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Peter Gilles </p>
+          </div>
+  </div>
     
     <div>
     <div class="quarto-title-meta-heading">Published</div>
@@ -3748,352 +3753,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Limits.</strong> (i) The intervals describe uncertainty about the population-mean trajectories only, not speaker spread. (ii) The age3 models are additive in age and gender, so shape differences across age blocks arise only through the additive coefficient shifts. (iii) The metrics use the 10–90% window (<code>visc_window</code> in the chunk above), so onset and offset are the points at 10% and 90% of the vowel, not the vowel’s acoustic edges; change <code>visc_window</code> to use another window. (iv) The <code>ɑɪ</code>/<code>æːɪ</code>/<code>ɜɪ</code> split relies partly on the orthographic repair rules, so a shape difference involving these vowels could partly reflect those rules. (v) Progress is measured along the straight onset–offset line, so for vowels with a very short or non-monotone glide (small extent) t50, lag and straightness become less stable; read them together with extent. (vi) <strong>TL in the window is partly edge movement</strong>: for monophthongs such as <code>æ</code> and <code>aː</code> the speed profile has its two peaks near the edges of the 10–90% window, where the formants are still moving towards or away from the neighbouring consonants, with a quiet plateau in between. Their TL, and its change with age, therefore mixes the vowel’s own movement with the speed of the consonant transitions and any change in the following or preceding contexts; the models contain no context predictors. A narrower window (e.g.&nbsp;25–75%) would be a sensitivity check. (vii) <strong>Token-level TL is not the length of the mean trajectory</strong> (see above); the two are reported side by side on purpose and need not agree. (viii) <strong>Duration</strong> enters the token-level models as the token’s full duration, while TL is taken over the 10–90% window; the models contain speaker and word effects but no other covariates, and the duration slope is estimated across all tokens of a vowel, so it is a pooled slope, not a within-speaker one. (ix) The token-level and rate models are Gaussian on log scale with default priors; their fits are not stored, only the posterior draws of the fixed effects (R-hat at most 1.01 and no divergences in the TL models). (x) Apparent time: differences between age blocks cannot distinguish change from age-grading.</p>
 </section>
 </section>
-<section id="do-the-dynamics-add-age-information-beyond-the-midpoint" class="level1" data-number="6">
-<h1 data-number="6"><span class="header-section-number">6</span> Do the dynamics add age information beyond the midpoint?</h1>
-<p>The functional approach is only worth its cost if the trajectory shape carries information about change that a single measurement point misses. Cox et al.&nbsp;(2024) find such cases for Australian English (9 of 40 vowel × formant comparisons show change only in the dynamics). van der Harst, Van de Velde &amp; Van Hout (2014) show the same for regional variation in Dutch: predicting a speaker’s region from one time point gives 65% correct, from five time points 96%. This section runs the same test on our data, with age block as the outcome (<code>dynamic_vs_midpoint_age3.R</code>, cached in <code>dynamic_vs_midpoint_age3.rds</code>; features from <code>speaker_vowel_features_age3.R</code>).</p>
-<p><strong>The idea in plain words.</strong> Imagine we only know how a speaker pronounces one vowel, and have to guess whether they belong to the young, middle or old block. We give a statistical classifier that information in four different “formats”: first only F1/F2 at one moment in the vowel (the midpoint), then progressively more of the trajectory (its average, then its average + slope + curvature, then everything). If a richer format guesses the age block <em>better on speakers the classifier has never seen</em>, the extra information it contains (the shape of the movement) is related to age. If it guesses no better, the midpoint already says everything. The question is therefore not “how well can we predict age?” but “does knowing the shape help beyond the midpoint?”.</p>
-<p><strong>Design.</strong> One row per speaker and vowel: the mean of the speaker’s token-level coefficients. Four representations of the same tokens are compared as predictors of the speaker’s age block (young / middle / old), each together with gender:</p>
-<ul>
-<li><code>mid</code>: reconstructed F1 and F2 at the temporal midpoint (2 predictors);</li>
-<li><code>c0</code>: the trajectory mean (DCT0) of F1 and F2 (2 predictors);</li>
-<li><code>c0_2</code>: DCT0–DCT2, i.e.&nbsp;mean, slope and curvature (6 predictors);</li>
-<li><code>c0_4</code>: all five coefficients (10 predictors).</li>
-</ul>
-<p>The classifier is a ridge-penalised multinomial regression. Every score is <strong>out of sample</strong>: 10-fold cross-validation over speakers, repeated three times, so no speaker is in both training and test data. This matters because a richer predictor set fits better by chance alone, the caveat both source papers raise. The headline metric is the multinomial log-loss, reported as <strong>skill relative to a gender-only baseline</strong> (1 − loss / baseline loss; 0 = no better than knowing gender, higher = better). Balanced accuracy (chance 0.33) is secondary. <strong>ALL</strong> pools all twelve vowels per speaker (speakers who have every vowel).</p>
-<p><strong>How to read the numbers.</strong></p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Term</th>
-<th>Meaning</th>
-<th>Scale</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Skill</td>
-<td>How much smaller the prediction error (log-loss) is than that of a guesser who knows only the speaker’s gender. Log-loss penalises confident wrong guesses heavily.</td>
-<td>0 = no better than gender alone; 1 = perfect; negative = worse than gender alone. Skill of 0.30 means 30% less error than the baseline.</td>
-</tr>
-<tr class="even">
-<td>Balanced accuracy</td>
-<td>Share of speakers put in the correct age block, averaged over the three blocks so that a larger block does not dominate.</td>
-<td>0.33 = chance; 1 = perfect.</td>
-</tr>
-<tr class="odd">
-<td>Paired improvement (Δ log-loss)</td>
-<td>For each speaker, the loss of the midpoint model minus the loss of the richer model, averaged over speakers.</td>
-<td>Positive = the richer representation is better; 0 = no difference.</td>
-</tr>
-<tr class="even">
-<td>z</td>
-<td>The mean paired improvement divided by its standard error.</td>
-<td>Roughly, a z above 2 (in absolute value) means the improvement is larger than speaker-to-speaker noise (but see the caveat below).</td>
-</tr>
-</tbody>
-</table>
-<p>Skill is <em>not</em> a measure of effect size of the age change; it is a measure of how much age-related information the representation contains. Two representations can only be compared with each other, within a vowel.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>dvm <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"dynamic_vs_midpoint_age3.rds"</span>)</span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>dvm<span class="sc">$</span>perf <span class="sc">|&gt;</span></span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(set <span class="sc">!=</span> <span class="st">"baseline"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">set =</span> <span class="fu">factor</span>(set, <span class="fu">c</span>(<span class="st">"mid"</span>, <span class="st">"c0"</span>, <span class="st">"c0_2"</span>, <span class="st">"c0_4"</span>))) <span class="sc">|&gt;</span></span>
-<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(label, n, set, skill) <span class="sc">|&gt;</span></span>
-<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> set, <span class="at">values_from =</span> skill) <span class="sc">|&gt;</span></span>
-<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Vowel"</span>, <span class="st">"Speakers"</span>, <span class="st">"Midpoint"</span>, <span class="st">"DCT0"</span>, <span class="st">"DCT0–2"</span>, <span class="st">"DCT0–4"</span>),</span>
-<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">caption =</span> <span class="st">"Out-of-sample log-loss skill vs gender-only baseline (higher = better)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<table class="caption-top table table-sm table-striped small">
-<caption>Out-of-sample log-loss skill vs gender-only baseline (higher = better)</caption>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Vowel</th>
-<th style="text-align: right;">Speakers</th>
-<th style="text-align: right;">Midpoint</th>
-<th style="text-align: right;">DCT0</th>
-<th style="text-align: right;">DCT0–2</th>
-<th style="text-align: right;">DCT0–4</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">ɜɪ</td>
-<td style="text-align: right;">1316</td>
-<td style="text-align: right;">0.134</td>
-<td style="text-align: right;">0.110</td>
-<td style="text-align: right;">0.177</td>
-<td style="text-align: right;">0.179</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">o</td>
-<td style="text-align: right;">1315</td>
-<td style="text-align: right;">0.012</td>
-<td style="text-align: right;">0.015</td>
-<td style="text-align: right;">0.038</td>
-<td style="text-align: right;">0.041</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">ɑ</td>
-<td style="text-align: right;">1316</td>
-<td style="text-align: right;">0.053</td>
-<td style="text-align: right;">0.063</td>
-<td style="text-align: right;">0.107</td>
-<td style="text-align: right;">0.106</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">ɑɪ</td>
-<td style="text-align: right;">1315</td>
-<td style="text-align: right;">0.036</td>
-<td style="text-align: right;">0.036</td>
-<td style="text-align: right;">0.119</td>
-<td style="text-align: right;">0.115</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">aː</td>
-<td style="text-align: right;">1316</td>
-<td style="text-align: right;">0.045</td>
-<td style="text-align: right;">0.035</td>
-<td style="text-align: right;">0.110</td>
-<td style="text-align: right;">0.109</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">eː</td>
-<td style="text-align: right;">1316</td>
-<td style="text-align: right;">0.011</td>
-<td style="text-align: right;">0.011</td>
-<td style="text-align: right;">0.045</td>
-<td style="text-align: right;">0.046</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">oː</td>
-<td style="text-align: right;">1316</td>
-<td style="text-align: right;">0.012</td>
-<td style="text-align: right;">0.015</td>
-<td style="text-align: right;">0.040</td>
-<td style="text-align: right;">0.040</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">æːɪ</td>
-<td style="text-align: right;">1314</td>
-<td style="text-align: right;">0.006</td>
-<td style="text-align: right;">0.012</td>
-<td style="text-align: right;">0.027</td>
-<td style="text-align: right;">0.028</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">æ</td>
-<td style="text-align: right;">1316</td>
-<td style="text-align: right;">0.032</td>
-<td style="text-align: right;">0.027</td>
-<td style="text-align: right;">0.047</td>
-<td style="text-align: right;">0.045</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">ɑʊ</td>
-<td style="text-align: right;">1284</td>
-<td style="text-align: right;">0.006</td>
-<td style="text-align: right;">0.009</td>
-<td style="text-align: right;">0.038</td>
-<td style="text-align: right;">0.043</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">əʊ</td>
-<td style="text-align: right;">1310</td>
-<td style="text-align: right;">0.031</td>
-<td style="text-align: right;">0.032</td>
-<td style="text-align: right;">0.047</td>
-<td style="text-align: right;">0.050</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">æːʊ</td>
-<td style="text-align: right;">1316</td>
-<td style="text-align: right;">0.017</td>
-<td style="text-align: right;">0.014</td>
-<td style="text-align: right;">0.030</td>
-<td style="text-align: right;">0.028</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">ALL</td>
-<td style="text-align: right;">1276</td>
-<td style="text-align: right;">0.260</td>
-<td style="text-align: right;">0.243</td>
-<td style="text-align: right;">0.342</td>
-<td style="text-align: right;">0.325</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>dvm<span class="sc">$</span>perf <span class="sc">|&gt;</span></span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(set <span class="sc">!=</span> <span class="st">"baseline"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">set =</span> <span class="fu">factor</span>(set, <span class="fu">c</span>(<span class="st">"mid"</span>, <span class="st">"c0"</span>, <span class="st">"c0_2"</span>, <span class="st">"c0_4"</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Midpoint"</span>, <span class="st">"DCT0"</span>, <span class="st">"DCT0–2"</span>, <span class="st">"DCT0–4"</span>)),</span>
-<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">factor</span>(label, <span class="fu">c</span>(<span class="fu">setdiff</span>(<span class="fu">unique</span>(label), <span class="st">"ALL"</span>), <span class="st">"ALL"</span>))</span>
-<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(set, skill, <span class="at">group =</span> label)) <span class="sc">+</span></span>
-<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linewidth =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
-<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">colour =</span> <span class="st">"grey50"</span>) <span class="sc">+</span></span>
-<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> label, <span class="at">nrow =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"How much age information do the dynamics add over the midpoint?"</span>,</span>
-<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Out-of-sample log-loss skill vs a gender-only baseline; 10-fold CV over speakers × 3 repeats"</span>,</span>
-<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Representation of the vowel"</span>, <span class="at">y =</span> <span class="st">"Skill"</span></span>
-<span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="paper_figures_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>dvm<span class="sc">$</span>paired <span class="sc">|&gt;</span></span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(from <span class="sc">==</span> <span class="st">"mid"</span>, to <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"c0"</span>, <span class="st">"c0_2"</span>, <span class="st">"c0_4"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">txt =</span> <span class="fu">sprintf</span>(<span class="st">"%.3f (z = %.1f)"</span>, delta_logloss, z),</span>
-<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">to =</span> <span class="fu">factor</span>(to, <span class="fu">c</span>(<span class="st">"c0"</span>, <span class="st">"c0_2"</span>, <span class="st">"c0_4"</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"DCT0"</span>, <span class="st">"DCT0–2"</span>, <span class="st">"DCT0–4"</span>))) <span class="sc">|&gt;</span></span>
-<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(label, to, txt) <span class="sc">|&gt;</span></span>
-<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> to, <span class="at">values_from =</span> txt) <span class="sc">|&gt;</span></span>
-<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Vowel"</span>, <span class="st">"DCT0 vs midpoint"</span>, <span class="st">"DCT0–2 vs midpoint"</span>, <span class="st">"DCT0–4 vs midpoint"</span>),</span>
-<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">caption =</span> <span class="st">"Paired out-of-sample log-loss improvement over the midpoint (positive = the richer representation predicts age better; z = mean / SE over speakers)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<table class="caption-top table table-sm table-striped small">
-<caption>Paired out-of-sample log-loss improvement over the midpoint (positive = the richer representation predicts age better; z = mean / SE over speakers)</caption>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Vowel</th>
-<th style="text-align: left;">DCT0 vs midpoint</th>
-<th style="text-align: left;">DCT0–2 vs midpoint</th>
-<th style="text-align: left;">DCT0–4 vs midpoint</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">ɜɪ</td>
-<td style="text-align: left;">-0.026 (z = -6.6)</td>
-<td style="text-align: left;">0.045 (z = 5.7)</td>
-<td style="text-align: left;">0.047 (z = 5.4)</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">o</td>
-<td style="text-align: left;">0.003 (z = 2.1)</td>
-<td style="text-align: left;">0.028 (z = 3.9)</td>
-<td style="text-align: left;">0.031 (z = 4.2)</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">ɑ</td>
-<td style="text-align: left;">0.011 (z = 3.6)</td>
-<td style="text-align: left;">0.057 (z = 6.4)</td>
-<td style="text-align: left;">0.056 (z = 6.0)</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">ɑɪ</td>
-<td style="text-align: left;">-0.000 (z = -0.1)</td>
-<td style="text-align: left;">0.089 (z = 8.6)</td>
-<td style="text-align: left;">0.084 (z = 7.8)</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">aː</td>
-<td style="text-align: left;">-0.010 (z = -6.3)</td>
-<td style="text-align: left;">0.070 (z = 7.6)</td>
-<td style="text-align: left;">0.069 (z = 7.1)</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">eː</td>
-<td style="text-align: left;">0.000 (z = 0.1)</td>
-<td style="text-align: left;">0.037 (z = 5.3)</td>
-<td style="text-align: left;">0.038 (z = 5.3)</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">oː</td>
-<td style="text-align: left;">0.003 (z = 1.8)</td>
-<td style="text-align: left;">0.030 (z = 4.7)</td>
-<td style="text-align: left;">0.030 (z = 4.6)</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">æːɪ</td>
-<td style="text-align: left;">0.007 (z = 3.0)</td>
-<td style="text-align: left;">0.023 (z = 3.9)</td>
-<td style="text-align: left;">0.023 (z = 3.7)</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">æ</td>
-<td style="text-align: left;">-0.005 (z = -2.5)</td>
-<td style="text-align: left;">0.016 (z = 3.0)</td>
-<td style="text-align: left;">0.015 (z = 2.6)</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">ɑʊ</td>
-<td style="text-align: left;">0.003 (z = 1.6)</td>
-<td style="text-align: left;">0.034 (z = 4.4)</td>
-<td style="text-align: left;">0.039 (z = 5.0)</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">əʊ</td>
-<td style="text-align: left;">0.001 (z = 0.2)</td>
-<td style="text-align: left;">0.016 (z = 3.2)</td>
-<td style="text-align: left;">0.020 (z = 3.7)</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">æːʊ</td>
-<td style="text-align: left;">-0.003 (z = -1.7)</td>
-<td style="text-align: left;">0.014 (z = 3.0)</td>
-<td style="text-align: left;">0.012 (z = 2.4)</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">ALL</td>
-<td style="text-align: left;">-0.017 (z = -2.9)</td>
-<td style="text-align: left;">0.088 (z = 6.8)</td>
-<td style="text-align: left;">0.070 (z = 5.2)</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><strong>How to read the table and the figure.</strong></p>
-<ul>
-<li><strong>Table (skill).</strong> One row per vowel, one column per representation. Read <em>along a row</em>: does the number grow from left to right? Do not compare rows with each other: a vowel with low skill is not necessarily a vowel that changed less, only one whose age signal is harder to recover from individual speakers.</li>
-<li><strong>Figure.</strong> One panel per vowel (plus ALL), with the four representations on the x-axis and skill on the y-axis; each grey line joins the four points of one vowel. The horizontal line at 0 is the gender-only baseline. What to look for: (1) a line that <strong>rises</strong> from Midpoint to DCT0–2 means shape adds age information; (2) a line that is <strong>flat</strong> between two points means the extra coefficients add nothing; (3) a line that <strong>dips</strong> means the additional predictors mostly added noise. Points near or below zero mean the representation barely beats knowing gender.</li>
-<li><strong>Paired table.</strong> The same comparison expressed as a difference to the midpoint, vowel by vowel, with a z-value for how consistent the difference is across speakers. Here the <strong>sign</strong> gives the direction (positive = richer is better) and <strong>z</strong> the reliability. A large positive value with a large z is a clear gain; a small value with a z below about 2 in absolute value is no evidence for a difference.</li>
-</ul>
-<p><strong>How to interpret them.</strong> A gain from DCT0 to DCT0–2 can only come from slope and curvature, i.e.&nbsp;from the <em>shape</em> of the trajectory, because the average is already in DCT0. Substantively, it says that the age-related sound change is not only a shift of where the vowel sits in the vowel space (which the midpoint captures) but also a change in <em>how the vowel moves</em>, e.g.&nbsp;a different glide direction or amount of movement. Conversely, no gain means the change is fully summarised by position. Whether the gain comes from F1 or F2, and what the shape change looks like, is not answered here; the difference curves and the glide-shape section above show that. Finally, low absolute accuracies are expected and are not a failure of the method: each speaker contributes only one vowel’s information to a three-way guess, and speakers of neighbouring age blocks overlap strongly.</p>
-<p><strong>What the results show.</strong></p>
-<ul>
-<li><strong>Slope and curvature carry age information that the midpoint misses.</strong> Adding them (DCT0–2) improves out-of-sample prediction of age block over the midpoint for all twelve vowels (paired z between 3.0 and 8.6). Pooling the vowels, skill rises from 0.26 to 0.34 and balanced accuracy from 0.63 to 0.68. The largest gains are for <code>ɑɪ</code>, <code>aː</code>, <code>ɑ</code> and <code>ɜɪ</code>.</li>
-<li><strong>The mean of the trajectory alone adds nothing.</strong> DCT0 is no better than the midpoint (differences within ±0.03, and negative for <code>ɜɪ</code>, <code>aː</code> and <code>æ</code>). The gain therefore comes from the <em>shape</em> of the trajectory, not from replacing a point by an average.</li>
-<li><strong>DCT3 and DCT4 add nothing for age prediction.</strong> DCT0–4 is indistinguishable from DCT0–2 for every vowel and slightly worse when all vowels are pooled. This agrees with the truncation analysis (<code>dct_coef_truncation_age3.R</code>), where dropping the two highest coefficients changes the age contrast by less than its own sampling noise.</li>
-<li><strong>Per-vowel prediction is modest.</strong> Even the best vowel reaches a balanced accuracy of only 0.55 (chance 0.33), because individual speakers overlap strongly across age blocks, the point made in the section on individual speakers below. The interest here is the comparison between representations, not the absolute accuracy.</li>
-<li><strong>Caveat on the z-values.</strong> They use the standard error over speakers of the out-of-fold loss. Cross-validation folds share training data, so these standard errors are somewhat optimistic; read z as a ranking of evidence, not as exact significance levels.</li>
-</ul>
-</section>
-<section id="individual-speakers-and-the-community-change" class="level1" data-number="7">
-<h1 data-number="7"><span class="header-section-number">7</span> Individual speakers and the community change</h1>
+<section id="individual-speakers-and-the-community-change" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Individual speakers and the community change</h1>
 <p>The sections above describe the <em>community-level</em> age difference: how the average F1/F2 track of an age block differs from that of another block. This section asks how individual speakers sit relative to that difference. A small shift of the average is compatible with a large spread of individuals, and the two views should not be confused: the speaker random intercepts of the models are net of the age block (the block effect has been removed), so they cannot show an age trend by themselves. To put individuals and community change on one scale, each speaker’s full track is rebuilt, in every posterior draw of the age3 fits, from the block’s population track and the speaker’s own deviation (<code>speaker_position_draws_age3.R</code>).</p>
 <p><strong>The size of the change differs between vowels.</strong> The table gives, for every vowel, the size of the old − young change (<em>gap</em>) and the spread of individual speakers along that change, both in Lobanov-2.0 z. The speaker-position figure below uses the same z scale for every vowel: the young block mean lies at +gap/2 (right) and the old block mean at −gap/2 (left), so the distance between the two dotted lines in a panel is the gap of the table. Vowels with more change therefore have their reference lines further apart, and the width of the speaker curves (the individual spread) can be compared directly across panels.</p>
 <p><em>Gap</em> is computed from the model, not from speakers: the inputs are the average F1(t) and F2(t) tracks of the young (≤ 34) and the old (55+) block, i.e.&nbsp;the posterior medians of the population tracks of the age3 Bayesian fits (women and men averaged within each draw), the same tracks as in the posterior-draw figures. At each of 80 equally spaced time points between 10% and 90% of the vowel, the old − young difference is taken in F1 and in F2 and combined into one distance in the F1/F2 plane, √(ΔF1² + ΔF2²). The gap is the root-mean-square (RMS) of these distances over time, in Lobanov-2.0 z: each distance is squared, the squares are averaged over the 80 time points, and the square root is taken. It is a typical size of the difference between the two blocks over the vowel in which large differences count more than small ones (it is never smaller than the plain mean of the distances), and it is the size that the position scale below is built on, because the position divides by the summed squared distances. (Example <code>ɑʊ</code>: the F1 difference is about 0.30 z early and about 0 from 70% on, F2 differs by at most 0.07 z. At 10%, 30%, 50%, 70% and 90% of the vowel the distances are about 0.31, 0.29, 0.15, 0.02 and 0.07 z; their plain mean is about 0.17 z, their RMS about 0.20 z, which is the gap in the table.) <em>Individual spread</em> is the standard deviation of the speakers’ positions along the change (the position is defined below), taken within the young and old block, pooled, and averaged over the posterior draws (median), then converted to z by multiplying with the gap (spread in gap units × gap).</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>ll <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"laggard_leader_tracks_age3.rds"</span>)   <span class="co"># gender-averaged block tracks</span></span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>spd <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"speaker_position_draws_age3.rds"</span>) <span class="co"># speaker positions per posterior draw, one list element per vowel</span></span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>gap_tbl <span class="ot">&lt;-</span> ll<span class="sc">$</span>tracks <span class="sc">|&gt;</span></span>
-<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(track <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"young_block"</span>, <span class="st">"old_block"</span>), prop_time <span class="sc">&gt;=</span> <span class="fl">0.1</span>, prop_time <span class="sc">&lt;=</span> <span class="fl">0.9</span>) <span class="sc">|&gt;</span></span>
-<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> <span class="fu">c</span>(label, prop_time), <span class="at">names_from =</span> track, <span class="at">values_from =</span> <span class="fu">c</span>(F1, F2)) <span class="sc">|&gt;</span></span>
-<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">g1 =</span> F1_old_block <span class="sc">-</span> F1_young_block, <span class="at">g2 =</span> F2_old_block <span class="sc">-</span> F2_young_block) <span class="sc">|&gt;</span></span>
-<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">gap =</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>(g1<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> g2<span class="sc">^</span><span class="dv">2</span>)), <span class="at">.by =</span> label) <span class="sc">|&gt;</span></span>
-<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># spread of the speakers' positions in gap units (median over draws); one position unit = the gap, so spread (z) = SD x gap</span></span>
-<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sd_gap =</span> <span class="fu">map_dbl</span>(label, \(v) <span class="fu">median</span>(spd[[v]]<span class="sc">$</span>per_draw<span class="sc">$</span>sd_within)), <span class="at">spread_z =</span> sd_gap <span class="sc">*</span> gap) <span class="sc">|&gt;</span></span>
-<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(gap))</span>
-<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>gap_tbl <span class="sc">|&gt;</span></span>
-<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(<span class="at">Vowel =</span> label, <span class="st">`</span><span class="at">Gap, RMS over 10–90% (z)</span><span class="st">`</span> <span class="ot">=</span> gap, <span class="st">`</span><span class="at">Individual spread (approx., z)</span><span class="st">`</span> <span class="ot">=</span> spread_z) <span class="sc">|&gt;</span></span>
-<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">2</span>, <span class="at">caption =</span> <span class="st">"Size of the old − young change per vowel and spread of individual speakers (ordered by the size of the gap)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>ll <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"laggard_leader_tracks_age3.rds"</span>)   <span class="co"># gender-averaged block tracks</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>spd <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"speaker_position_draws_age3.rds"</span>) <span class="co"># speaker positions per posterior draw, one list element per vowel</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>gap_tbl <span class="ot">&lt;-</span> ll<span class="sc">$</span>tracks <span class="sc">|&gt;</span></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(track <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"young_block"</span>, <span class="st">"old_block"</span>), prop_time <span class="sc">&gt;=</span> <span class="fl">0.1</span>, prop_time <span class="sc">&lt;=</span> <span class="fl">0.9</span>) <span class="sc">|&gt;</span></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> <span class="fu">c</span>(label, prop_time), <span class="at">names_from =</span> track, <span class="at">values_from =</span> <span class="fu">c</span>(F1, F2)) <span class="sc">|&gt;</span></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">g1 =</span> F1_old_block <span class="sc">-</span> F1_young_block, <span class="at">g2 =</span> F2_old_block <span class="sc">-</span> F2_young_block) <span class="sc">|&gt;</span></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">gap =</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>(g1<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> g2<span class="sc">^</span><span class="dv">2</span>)), <span class="at">.by =</span> label) <span class="sc">|&gt;</span></span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># spread of the speakers' positions in gap units (median over draws); one position unit = the gap, so spread (z) = SD x gap</span></span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sd_gap =</span> <span class="fu">map_dbl</span>(label, \(v) <span class="fu">median</span>(spd[[v]]<span class="sc">$</span>per_draw<span class="sc">$</span>sd_within)), <span class="at">spread_z =</span> sd_gap <span class="sc">*</span> gap) <span class="sc">|&gt;</span></span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(gap))</span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>gap_tbl <span class="sc">|&gt;</span></span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(<span class="at">Vowel =</span> label, <span class="st">`</span><span class="at">Gap, RMS over 10–90% (z)</span><span class="st">`</span> <span class="ot">=</span> gap, <span class="st">`</span><span class="at">Individual spread (approx., z)</span><span class="st">`</span> <span class="ot">=</span> spread_z) <span class="sc">|&gt;</span></span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">2</span>, <span class="at">caption =</span> <span class="st">"Size of the old − young change per vowel and spread of individual speakers (ordered by the size of the gap)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
 <caption>Size of the old − young change per vowel and spread of individual speakers (ordered by the size of the gap)</caption>
@@ -4177,37 +3855,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p><strong>Construction.</strong> Everything comes from the age3 Bayesian fits. In each posterior draw, a speaker’s full track is the population track of the speaker’s block (and gender) plus the speaker’s own deviation, the <code>(1 | speaker_id)</code> random intercepts of that draw, and this track is projected on the old − young gap of the same draw over 10–90% of the vowel. The result is the speaker’s <strong>position in gap units</strong>: the young block mean is at −0.5, the old block mean at +0.5, and 0 is the midpoint. A community change of one gap unit therefore corresponds to the distance between the two vertical dotted lines in the figure. 500 evenly spaced draws per vowel are used. A single draw of the speaker deviations is not shrunk towards the block average, so the positions of one draw have the full spread of the speakers (with an honest allowance for the uncertainty of each speaker), and every statistic below can be given with an interval over the draws. Two cruder estimates bracket this one: the speakers’ own token means (noisy, so the spread is too large and the separation too small) and the posterior means of the speaker deviations (pulled towards 0, so the spread is too small and the separation too large); their ranges are given in the summary. The figure pools 50 of the draws.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>sp <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"speaker_position_gap_age3.rds"</span>)      <span class="co"># earlier estimates from token means / posterior means (used in the summary)</span></span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>block_labels <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">young =</span> <span class="st">"young (≤ 34)"</span>, <span class="at">middle =</span> <span class="st">"middle (35–54)"</span>, <span class="at">old =</span> <span class="st">"old (55+)"</span>)</span>
-<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="fu">imap_dfr</span>(spd, \(r, lab) {</span>
-<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>  keep <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">seq</span>(<span class="dv">1</span>, <span class="fu">ncol</span>(r<span class="sc">$</span>pos), <span class="at">length.out =</span> <span class="dv">50</span>))</span>
-<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>  m <span class="ot">&lt;-</span> r<span class="sc">$</span>pos[, keep]</span>
-<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">colnames</span>(m) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"draw"</span>, <span class="fu">seq_along</span>(keep))</span>
-<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>(m) <span class="sc">|&gt;</span></span>
-<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">Alter3 =</span> r<span class="sc">$</span>meta<span class="sc">$</span>Alter3) <span class="sc">|&gt;</span></span>
-<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="sc">-</span>Alter3, <span class="at">values_to =</span> <span class="st">"position"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">transmute</span>(<span class="at">label =</span> lab, Alter3, position)</span>
-<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>}) <span class="sc">|&gt;</span></span>
-<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(gap_tbl <span class="sc">|&gt;</span> <span class="fu">select</span>(label, gap), <span class="at">by =</span> <span class="st">"label"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># gap units -&gt; Lobanov-2.0 z along the direction of the change: the block means then lie at -gap/2 and +gap/2,</span></span>
-<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># so vowels with more change have their reference lines further apart</span></span>
-<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># sign flipped for display: young block on the right (positive), old block on the left (negative)</span></span>
-<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">position_z =</span> <span class="sc">-</span>position <span class="sc">*</span> gap,</span>
-<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a>         <span class="at">label =</span> <span class="fu">factor</span>(label, <span class="at">levels =</span> age3_vowels), <span class="at">Alter3 =</span> <span class="fu">factor</span>(Alter3, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"young"</span>, <span class="st">"middle"</span>, <span class="st">"old"</span>))) <span class="sc">|&gt;</span></span>
-<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(position_z, <span class="at">fill =</span> Alter3, <span class="at">colour =</span> Alter3)) <span class="sc">+</span></span>
-<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.3</span>, <span class="at">linewidth =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb50-20"><a href="#cb50-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">data =</span> gap_tbl <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">label =</span> <span class="fu">factor</span>(label, <span class="at">levels =</span> age3_vowels)) <span class="sc">|&gt;</span></span>
-<span id="cb50-21"><a href="#cb50-21" aria-hidden="true" tabindex="-1"></a>               <span class="fu">pivot_longer</span>(<span class="fu">c</span>(gap), <span class="at">values_to =</span> <span class="st">"g"</span>) <span class="sc">|&gt;</span> <span class="fu">reframe</span>(<span class="at">xint =</span> <span class="fu">c</span>(<span class="sc">-</span>g <span class="sc">/</span> <span class="dv">2</span>, g <span class="sc">/</span> <span class="dv">2</span>), <span class="at">.by =</span> label),</span>
-<span id="cb50-22"><a href="#cb50-22" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">xintercept =</span> xint), <span class="at">linetype =</span> <span class="st">"dotted"</span>, <span class="at">colour =</span> <span class="st">"grey35"</span>) <span class="sc">+</span></span>
-<span id="cb50-23"><a href="#cb50-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> age3_colours, <span class="at">labels =</span> block_labels, <span class="at">name =</span> <span class="st">"Age block"</span>) <span class="sc">+</span></span>
-<span id="cb50-24"><a href="#cb50-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> age3_colours, <span class="at">labels =</span> block_labels, <span class="at">name =</span> <span class="st">"Age block"</span>) <span class="sc">+</span></span>
-<span id="cb50-25"><a href="#cb50-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.8</span>, <span class="fl">0.8</span>)) <span class="sc">+</span></span>
-<span id="cb50-26"><a href="#cb50-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> label, <span class="at">ncol =</span> <span class="dv">3</span>, <span class="at">scales =</span> <span class="st">"free_y"</span>) <span class="sc">+</span></span>
-<span id="cb50-27"><a href="#cb50-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
-<span id="cb50-28"><a href="#cb50-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>, <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(), <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
-<span id="cb50-29"><a href="#cb50-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Speakers' positions on the old–young axis, by age block (posterior draws)"</span>,</span>
-<span id="cb50-30"><a href="#cb50-30" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Dotted lines: old block mean (left) and young block mean (right);</span><span class="sc">\n</span><span class="st">distance between them = the community change, on the same z scale in every vowel"</span>,</span>
-<span id="cb50-31"><a href="#cb50-31" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Position along the old–young direction (Lobanov 2.0 z; 0 = midpoint between the old and young block means; positive = young-like)"</span>, <span class="at">y =</span> <span class="st">"Density"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>sp <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"speaker_position_gap_age3.rds"</span>)      <span class="co"># earlier estimates from token means / posterior means (used in the summary)</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>block_labels <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">young =</span> <span class="st">"young (≤ 34)"</span>, <span class="at">middle =</span> <span class="st">"middle (35–54)"</span>, <span class="at">old =</span> <span class="st">"old (55+)"</span>)</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="fu">imap_dfr</span>(spd, \(r, lab) {</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>  keep <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">seq</span>(<span class="dv">1</span>, <span class="fu">ncol</span>(r<span class="sc">$</span>pos), <span class="at">length.out =</span> <span class="dv">50</span>))</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>  m <span class="ot">&lt;-</span> r<span class="sc">$</span>pos[, keep]</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">colnames</span>(m) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"draw"</span>, <span class="fu">seq_along</span>(keep))</span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>(m) <span class="sc">|&gt;</span></span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">Alter3 =</span> r<span class="sc">$</span>meta<span class="sc">$</span>Alter3) <span class="sc">|&gt;</span></span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="sc">-</span>Alter3, <span class="at">values_to =</span> <span class="st">"position"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">transmute</span>(<span class="at">label =</span> lab, Alter3, position)</span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>}) <span class="sc">|&gt;</span></span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(gap_tbl <span class="sc">|&gt;</span> <span class="fu">select</span>(label, gap), <span class="at">by =</span> <span class="st">"label"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># gap units -&gt; Lobanov-2.0 z along the direction of the change: the block means then lie at -gap/2 and +gap/2,</span></span>
+<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># so vowels with more change have their reference lines further apart</span></span>
+<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># sign flipped for display: young block on the right (positive), old block on the left (negative)</span></span>
+<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">position_z =</span> <span class="sc">-</span>position <span class="sc">*</span> gap,</span>
+<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a>         <span class="at">label =</span> <span class="fu">factor</span>(label, <span class="at">levels =</span> age3_vowels), <span class="at">Alter3 =</span> <span class="fu">factor</span>(Alter3, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"young"</span>, <span class="st">"middle"</span>, <span class="st">"old"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(position_z, <span class="at">fill =</span> Alter3, <span class="at">colour =</span> Alter3)) <span class="sc">+</span></span>
+<span id="cb47-19"><a href="#cb47-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.3</span>, <span class="at">linewidth =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb47-20"><a href="#cb47-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">data =</span> gap_tbl <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">label =</span> <span class="fu">factor</span>(label, <span class="at">levels =</span> age3_vowels)) <span class="sc">|&gt;</span></span>
+<span id="cb47-21"><a href="#cb47-21" aria-hidden="true" tabindex="-1"></a>               <span class="fu">pivot_longer</span>(<span class="fu">c</span>(gap), <span class="at">values_to =</span> <span class="st">"g"</span>) <span class="sc">|&gt;</span> <span class="fu">reframe</span>(<span class="at">xint =</span> <span class="fu">c</span>(<span class="sc">-</span>g <span class="sc">/</span> <span class="dv">2</span>, g <span class="sc">/</span> <span class="dv">2</span>), <span class="at">.by =</span> label),</span>
+<span id="cb47-22"><a href="#cb47-22" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">xintercept =</span> xint), <span class="at">linetype =</span> <span class="st">"dotted"</span>, <span class="at">colour =</span> <span class="st">"grey35"</span>) <span class="sc">+</span></span>
+<span id="cb47-23"><a href="#cb47-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> age3_colours, <span class="at">labels =</span> block_labels, <span class="at">name =</span> <span class="st">"Age block"</span>) <span class="sc">+</span></span>
+<span id="cb47-24"><a href="#cb47-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> age3_colours, <span class="at">labels =</span> block_labels, <span class="at">name =</span> <span class="st">"Age block"</span>) <span class="sc">+</span></span>
+<span id="cb47-25"><a href="#cb47-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.8</span>, <span class="fl">0.8</span>)) <span class="sc">+</span></span>
+<span id="cb47-26"><a href="#cb47-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> label, <span class="at">ncol =</span> <span class="dv">3</span>, <span class="at">scales =</span> <span class="st">"free_y"</span>) <span class="sc">+</span></span>
+<span id="cb47-27"><a href="#cb47-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb47-28"><a href="#cb47-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>, <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(), <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb47-29"><a href="#cb47-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Speakers' positions on the old–young axis, by age block (posterior draws)"</span>,</span>
+<span id="cb47-30"><a href="#cb47-30" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Dotted lines: old block mean (left) and young block mean (right);</span><span class="sc">\n</span><span class="st">distance between them = the community change, on the same z scale in every vowel"</span>,</span>
+<span id="cb47-31"><a href="#cb47-31" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Position along the old–young direction (Lobanov 2.0 z; 0 = midpoint between the old and young block means; positive = young-like)"</span>, <span class="at">y =</span> <span class="st">"Density"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -4230,71 +3908,71 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p><strong>Schematic: how a position arises from the tracks.</strong> The figure uses real <code>ɑʊ</code> data for women only (so that one midpoint applies to everybody). <strong>A</strong> shows one moment of the vowel (10%) in the F1/F2 plane: the real young and old block averages and their midpoint, and four <em>invented</em> speakers A–D. Each speaker’s point is dropped onto the line through the two block averages (dotted line, open circle = shadow); the position is where the shadow falls, with −0.5 at the young average, +0.5 at the old average and 0 at the midpoint. Speakers B and D lie clearly to the side of the line, yet their positions are 0 (the midpoint) and +0.5 (the old average): differences perpendicular to the change do not count. <strong>B</strong> applies the same projection to all 907 real women at this one moment (their raw token means with the model’s block averages as reference; this simple one-moment illustration does not use the posterior draws, so the blocks need not be centred on the dotted lines): the dots of the three age blocks overlap almost completely, the old speakers lean to the right and the young ones to the left. <strong>C</strong> shows the young → old arrow at five moments of the vowel: it is long early (mostly F1) and almost zero from about 70%, so the early part dominates the position over the whole vowel.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>psc <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"position_schematic_age3.rds"</span>)</span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>tgrid <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(psc<span class="sc">$</span>block<span class="sc">$</span>prop_time))</span>
-<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>near_t <span class="ot">&lt;-</span> \(x) tgrid[<span class="fu">which.min</span>(<span class="fu">abs</span>(tgrid <span class="sc">-</span> x))]</span>
-<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>ref_t <span class="ot">&lt;-</span> <span class="cf">function</span>(tt) {</span>
-<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>  b <span class="ot">&lt;-</span> psc<span class="sc">$</span>block <span class="sc">|&gt;</span> <span class="fu">filter</span>(prop_time <span class="sc">==</span> tt)</span>
-<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> b <span class="sc">|&gt;</span> <span class="fu">filter</span>(Alter3 <span class="sc">==</span> <span class="st">"young"</span>); o <span class="ot">&lt;-</span> b <span class="sc">|&gt;</span> <span class="fu">filter</span>(Alter3 <span class="sc">==</span> <span class="st">"old"</span>)</span>
-<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">Y1 =</span> y<span class="sc">$</span>F1, <span class="at">Y2 =</span> y<span class="sc">$</span>F2, <span class="at">O1 =</span> o<span class="sc">$</span>F1, <span class="at">O2 =</span> o<span class="sc">$</span>F2, <span class="at">M1 =</span> (y<span class="sc">$</span>F1 <span class="sc">+</span> o<span class="sc">$</span>F1) <span class="sc">/</span> <span class="dv">2</span>, <span class="at">M2 =</span> (y<span class="sc">$</span>F2 <span class="sc">+</span> o<span class="sc">$</span>F2) <span class="sc">/</span> <span class="dv">2</span>,</span>
-<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">g1 =</span> o<span class="sc">$</span>F1 <span class="sc">-</span> y<span class="sc">$</span>F1, <span class="at">g2 =</span> o<span class="sc">$</span>F2 <span class="sc">-</span> y<span class="sc">$</span>F2, <span class="at">glen =</span> <span class="fu">sqrt</span>((o<span class="sc">$</span>F1 <span class="sc">-</span> y<span class="sc">$</span>F1)<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> (o<span class="sc">$</span>F2 <span class="sc">-</span> y<span class="sc">$</span>F2)<span class="sc">^</span><span class="dv">2</span>))</span>
-<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>t0 <span class="ot">&lt;-</span> <span class="fu">near_t</span>(<span class="fl">0.10</span>); r0 <span class="ot">&lt;-</span> <span class="fu">ref_t</span>(t0)</span>
-<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>n1 <span class="ot">&lt;-</span> r0<span class="sc">$</span>g2 <span class="sc">/</span> r0<span class="sc">$</span>glen; n2 <span class="ot">&lt;-</span> <span class="sc">-</span>r0<span class="sc">$</span>g1 <span class="sc">/</span> r0<span class="sc">$</span>glen            <span class="co"># unit normal to the young-old line (F1, F2 components)</span></span>
-<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>ill <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">id =</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>), <span class="at">p =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.8</span>, <span class="dv">0</span>, <span class="fl">1.3</span>, <span class="fl">0.5</span>), <span class="at">perp =</span> <span class="fu">c</span>(<span class="fl">0.03</span>, <span class="fl">0.22</span>, <span class="sc">-</span><span class="fl">0.12</span>, <span class="sc">-</span><span class="fl">0.2</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(r0) <span class="sc">|&gt;</span></span>
-<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">F1 =</span> M1 <span class="sc">+</span> p <span class="sc">*</span> g1 <span class="sc">+</span> perp <span class="sc">*</span> n1, <span class="at">F2 =</span> M2 <span class="sc">+</span> p <span class="sc">*</span> g2 <span class="sc">+</span> perp <span class="sc">*</span> n2, <span class="at">s1 =</span> M1 <span class="sc">+</span> p <span class="sc">*</span> g1, <span class="at">s2 =</span> M2 <span class="sc">+</span> p <span class="sc">*</span> g2)</span>
-<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a>ticks1 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">p =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>), <span class="at">lab =</span> <span class="fu">c</span>(<span class="st">"−1"</span>, <span class="st">"+1"</span>)) <span class="sc">|&gt;</span> <span class="fu">bind_cols</span>(r0) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">t1 =</span> M1 <span class="sc">+</span> p <span class="sc">*</span> g1, <span class="at">t2 =</span> M2 <span class="sc">+</span> p <span class="sc">*</span> g2)</span>
-<span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a>line_ends <span class="ot">&lt;-</span> r0 <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">a1 =</span> M1 <span class="sc">-</span> <span class="fl">1.3</span> <span class="sc">*</span> g1, <span class="at">a2 =</span> M2 <span class="sc">-</span> <span class="fl">1.3</span> <span class="sc">*</span> g2, <span class="at">b1 =</span> M1 <span class="sc">+</span> <span class="fl">1.6</span> <span class="sc">*</span> g1, <span class="at">b2 =</span> M2 <span class="sc">+</span> <span class="fl">1.6</span> <span class="sc">*</span> g2)</span>
-<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-18"><a href="#cb51-18" aria-hidden="true" tabindex="-1"></a>pa <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb51-19"><a href="#cb51-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data =</span> line_ends, <span class="fu">aes</span>(<span class="at">x =</span> a2, <span class="at">y =</span> a1, <span class="at">xend =</span> b2, <span class="at">yend =</span> b1), <span class="at">colour =</span> <span class="st">"grey30"</span>, <span class="at">linewidth =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb51-20"><a href="#cb51-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data =</span> ill, <span class="fu">aes</span>(<span class="at">x =</span> F2, <span class="at">y =</span> F1, <span class="at">xend =</span> s2, <span class="at">yend =</span> s1), <span class="at">linetype =</span> <span class="st">"dotted"</span>) <span class="sc">+</span></span>
-<span id="cb51-21"><a href="#cb51-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> ill, <span class="fu">aes</span>(s2, s1), <span class="at">shape =</span> <span class="dv">21</span>, <span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">size =</span> <span class="fl">2.5</span>) <span class="sc">+</span></span>
-<span id="cb51-22"><a href="#cb51-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> ticks1, <span class="fu">aes</span>(t2, t1), <span class="at">shape =</span> <span class="dv">3</span>, <span class="at">size =</span> <span class="fl">2.5</span>, <span class="at">colour =</span> <span class="st">"grey30"</span>) <span class="sc">+</span></span>
-<span id="cb51-23"><a href="#cb51-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> ticks1, <span class="fu">aes</span>(t2, t1, <span class="at">label =</span> lab), <span class="at">size =</span> <span class="fl">3.2</span>, <span class="at">colour =</span> <span class="st">"grey30"</span>, <span class="at">hjust =</span> <span class="fl">2.2</span>) <span class="sc">+</span></span>
-<span id="cb51-24"><a href="#cb51-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> ill, <span class="fu">aes</span>(F2, F1), <span class="at">size =</span> <span class="fl">3.2</span>, <span class="at">shape =</span> <span class="dv">21</span>, <span class="at">fill =</span> <span class="st">"black"</span>, <span class="at">colour =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
-<span id="cb51-25"><a href="#cb51-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> ill, <span class="fu">aes</span>(F2, F1, <span class="at">label =</span> id), <span class="at">vjust =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
-<span id="cb51-26"><a href="#cb51-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> r0, <span class="fu">aes</span>(Y2, Y1), <span class="at">size =</span> <span class="fl">4.5</span>, <span class="at">shape =</span> <span class="dv">21</span>, <span class="at">fill =</span> age3_colours[[<span class="st">"young"</span>]]) <span class="sc">+</span></span>
-<span id="cb51-27"><a href="#cb51-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> r0, <span class="fu">aes</span>(O2, O1), <span class="at">size =</span> <span class="fl">4.5</span>, <span class="at">shape =</span> <span class="dv">21</span>, <span class="at">fill =</span> age3_colours[[<span class="st">"old"</span>]]) <span class="sc">+</span></span>
-<span id="cb51-28"><a href="#cb51-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> r0, <span class="fu">aes</span>(M2, M1), <span class="at">size =</span> <span class="fl">3.2</span>, <span class="at">shape =</span> <span class="dv">4</span>, <span class="at">stroke =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
-<span id="cb51-29"><a href="#cb51-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> r0, <span class="fu">aes</span>(Y2, Y1, <span class="at">label =</span> <span class="st">"young average = −0.5"</span>), <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.15</span>, <span class="at">size =</span> <span class="fl">3.3</span>) <span class="sc">+</span></span>
-<span id="cb51-30"><a href="#cb51-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> r0, <span class="fu">aes</span>(O2, O1, <span class="at">label =</span> <span class="st">"old average = +0.5"</span>), <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.15</span>, <span class="at">size =</span> <span class="fl">3.3</span>) <span class="sc">+</span></span>
-<span id="cb51-31"><a href="#cb51-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> r0, <span class="fu">aes</span>(M2, M1, <span class="at">label =</span> <span class="st">"midpoint = 0"</span>), <span class="at">hjust =</span> <span class="fl">1.25</span>, <span class="at">size =</span> <span class="fl">3.3</span>) <span class="sc">+</span></span>
-<span id="cb51-32"><a href="#cb51-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_reverse</span>(<span class="at">limits =</span> <span class="fu">c</span>(r0<span class="sc">$</span>M2 <span class="sc">+</span> <span class="fl">0.5</span>, r0<span class="sc">$</span>M2 <span class="sc">-</span> <span class="fl">0.75</span>)) <span class="sc">+</span> <span class="fu">scale_y_reverse</span>(<span class="at">limits =</span> <span class="fu">c</span>(r0<span class="sc">$</span>M1 <span class="sc">+</span> <span class="fl">0.6</span>, r0<span class="sc">$</span>M1 <span class="sc">-</span> <span class="fl">0.6</span>)) <span class="sc">+</span></span>
-<span id="cb51-33"><a href="#cb51-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>() <span class="sc">+</span> <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb51-34"><a href="#cb51-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">sprintf</span>(<span class="st">"A. One moment of ɑʊ (%.0f%% of the vowel)"</span>, <span class="dv">100</span> <span class="sc">*</span> t0),</span>
-<span id="cb51-35"><a href="#cb51-35" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Block values real; A–D invented.</span><span class="sc">\n</span><span class="st">Dotted = projection; open circle = shadow."</span>,</span>
-<span id="cb51-36"><a href="#cb51-36" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"F2 (Lobanov 2.0 z)"</span>, <span class="at">y =</span> <span class="st">"F1 (Lobanov 2.0 z)"</span>)</span>
-<span id="cb51-37"><a href="#cb51-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-38"><a href="#cb51-38" aria-hidden="true" tabindex="-1"></a>sp0 <span class="ot">&lt;-</span> psc<span class="sc">$</span>speaker <span class="sc">|&gt;</span> <span class="fu">filter</span>(prop_time <span class="sc">==</span> t0) <span class="sc">|&gt;</span> <span class="fu">bind_cols</span>(r0) <span class="sc">|&gt;</span></span>
-<span id="cb51-39"><a href="#cb51-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">p =</span> ((F1 <span class="sc">-</span> M1) <span class="sc">*</span> g1 <span class="sc">+</span> (F2 <span class="sc">-</span> M2) <span class="sc">*</span> g2) <span class="sc">/</span> glen<span class="sc">^</span><span class="dv">2</span>,</span>
-<span id="cb51-40"><a href="#cb51-40" aria-hidden="true" tabindex="-1"></a>         <span class="at">row =</span> <span class="fu">factor</span>(Alter3, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"A–D (invented)"</span>, <span class="st">"young"</span>, <span class="st">"middle"</span>, <span class="st">"old"</span>)))</span>
-<span id="cb51-41"><a href="#cb51-41" aria-hidden="true" tabindex="-1"></a>ill <span class="ot">&lt;-</span> ill <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">row =</span> <span class="fu">factor</span>(<span class="st">"A–D (invented)"</span>, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"A–D (invented)"</span>, <span class="st">"young"</span>, <span class="st">"middle"</span>, <span class="st">"old"</span>)))</span>
-<span id="cb51-42"><a href="#cb51-42" aria-hidden="true" tabindex="-1"></a>pb <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(sp0, <span class="fu">aes</span>(p, row, <span class="at">colour =</span> Alter3)) <span class="sc">+</span></span>
-<span id="cb51-43"><a href="#cb51-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">height =</span> <span class="fl">0.2</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>, <span class="at">size =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
-<span id="cb51-44"><a href="#cb51-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.5</span>, <span class="fl">0.5</span>), <span class="at">linetype =</span> <span class="st">"dotted"</span>) <span class="sc">+</span></span>
-<span id="cb51-45"><a href="#cb51-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> ill, <span class="at">colour =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb51-46"><a href="#cb51-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> ill, <span class="fu">aes</span>(<span class="at">label =</span> id), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">1.3</span>, <span class="at">colour =</span> <span class="st">"black"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>) <span class="sc">+</span></span>
-<span id="cb51-47"><a href="#cb51-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> age3_colours, <span class="at">guide =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
-<span id="cb51-48"><a href="#cb51-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>)) <span class="sc">+</span> <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb51-49"><a href="#cb51-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"B. The same projection for all 907 real women (one dot = one speaker, this one moment)"</span>,</span>
-<span id="cb51-50"><a href="#cb51-50" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Position = where the shadow falls, in units of the young–old distance; dotted lines = young (−0.5) and old (+0.5) block averages"</span>,</span>
-<span id="cb51-51"><a href="#cb51-51" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Position at this moment"</span>, <span class="at">y =</span> <span class="cn">NULL</span>)</span>
-<span id="cb51-52"><a href="#cb51-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-53"><a href="#cb51-53" aria-hidden="true" tabindex="-1"></a>tt <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(<span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="fl">0.7</span>, <span class="fl">0.9</span>), \(x) <span class="fu">ref_t</span>(<span class="fu">near_t</span>(x)) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">t =</span> <span class="fu">near_t</span>(x)))</span>
-<span id="cb51-54"><a href="#cb51-54" aria-hidden="true" tabindex="-1"></a>pc <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb51-55"><a href="#cb51-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>(<span class="at">data =</span> psc<span class="sc">$</span>block <span class="sc">|&gt;</span> <span class="fu">filter</span>(Alter3 <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"young"</span>, <span class="st">"old"</span>), prop_time <span class="sc">&gt;=</span> <span class="fl">0.1</span>, prop_time <span class="sc">&lt;=</span> <span class="fl">0.9</span>),</span>
-<span id="cb51-56"><a href="#cb51-56" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(F2, F1, <span class="at">colour =</span> Alter3, <span class="at">group =</span> Alter3), <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb51-57"><a href="#cb51-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data =</span> tt, <span class="fu">aes</span>(<span class="at">x =</span> Y2, <span class="at">y =</span> Y1, <span class="at">xend =</span> O2, <span class="at">yend =</span> O1), <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="fl">0.08</span>, <span class="st">"in"</span>), <span class="at">type =</span> <span class="st">"closed"</span>)) <span class="sc">+</span></span>
-<span id="cb51-58"><a href="#cb51-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> tt, <span class="fu">aes</span>(<span class="at">x =</span> M2, <span class="at">y =</span> M1, <span class="at">label =</span> <span class="fu">sprintf</span>(<span class="st">"%.0f%%"</span>, <span class="dv">100</span> <span class="sc">*</span> t)), <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">size =</span> <span class="fl">3.3</span>) <span class="sc">+</span></span>
-<span id="cb51-59"><a href="#cb51-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> age3_colours, <span class="at">name =</span> <span class="st">"Block average track"</span>) <span class="sc">+</span></span>
-<span id="cb51-60"><a href="#cb51-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_reverse</span>(<span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fl">0.25</span>)) <span class="sc">+</span> <span class="fu">scale_y_reverse</span>() <span class="sc">+</span> <span class="fu">coord_fixed</span>() <span class="sc">+</span> <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb51-61"><a href="#cb51-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>) <span class="sc">+</span></span>
-<span id="cb51-62"><a href="#cb51-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"C. Young → old arrow over time"</span>,</span>
-<span id="cb51-63"><a href="#cb51-63" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Long early (mostly F1), almost zero later"</span>,</span>
-<span id="cb51-64"><a href="#cb51-64" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"F2 (Lobanov 2.0 z)"</span>, <span class="at">y =</span> <span class="st">"F1 (Lobanov 2.0 z)"</span>)</span>
-<span id="cb51-65"><a href="#cb51-65" aria-hidden="true" tabindex="-1"></a>((pa <span class="sc">|</span> pc) <span class="sc">/</span> pb) <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">heights =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="fl">1.5</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>psc <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"position_schematic_age3.rds"</span>)</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>tgrid <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">unique</span>(psc<span class="sc">$</span>block<span class="sc">$</span>prop_time))</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>near_t <span class="ot">&lt;-</span> \(x) tgrid[<span class="fu">which.min</span>(<span class="fu">abs</span>(tgrid <span class="sc">-</span> x))]</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>ref_t <span class="ot">&lt;-</span> <span class="cf">function</span>(tt) {</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>  b <span class="ot">&lt;-</span> psc<span class="sc">$</span>block <span class="sc">|&gt;</span> <span class="fu">filter</span>(prop_time <span class="sc">==</span> tt)</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> b <span class="sc">|&gt;</span> <span class="fu">filter</span>(Alter3 <span class="sc">==</span> <span class="st">"young"</span>); o <span class="ot">&lt;-</span> b <span class="sc">|&gt;</span> <span class="fu">filter</span>(Alter3 <span class="sc">==</span> <span class="st">"old"</span>)</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">Y1 =</span> y<span class="sc">$</span>F1, <span class="at">Y2 =</span> y<span class="sc">$</span>F2, <span class="at">O1 =</span> o<span class="sc">$</span>F1, <span class="at">O2 =</span> o<span class="sc">$</span>F2, <span class="at">M1 =</span> (y<span class="sc">$</span>F1 <span class="sc">+</span> o<span class="sc">$</span>F1) <span class="sc">/</span> <span class="dv">2</span>, <span class="at">M2 =</span> (y<span class="sc">$</span>F2 <span class="sc">+</span> o<span class="sc">$</span>F2) <span class="sc">/</span> <span class="dv">2</span>,</span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">g1 =</span> o<span class="sc">$</span>F1 <span class="sc">-</span> y<span class="sc">$</span>F1, <span class="at">g2 =</span> o<span class="sc">$</span>F2 <span class="sc">-</span> y<span class="sc">$</span>F2, <span class="at">glen =</span> <span class="fu">sqrt</span>((o<span class="sc">$</span>F1 <span class="sc">-</span> y<span class="sc">$</span>F1)<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> (o<span class="sc">$</span>F2 <span class="sc">-</span> y<span class="sc">$</span>F2)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>t0 <span class="ot">&lt;-</span> <span class="fu">near_t</span>(<span class="fl">0.10</span>); r0 <span class="ot">&lt;-</span> <span class="fu">ref_t</span>(t0)</span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>n1 <span class="ot">&lt;-</span> r0<span class="sc">$</span>g2 <span class="sc">/</span> r0<span class="sc">$</span>glen; n2 <span class="ot">&lt;-</span> <span class="sc">-</span>r0<span class="sc">$</span>g1 <span class="sc">/</span> r0<span class="sc">$</span>glen            <span class="co"># unit normal to the young-old line (F1, F2 components)</span></span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a>ill <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">id =</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>), <span class="at">p =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.8</span>, <span class="dv">0</span>, <span class="fl">1.3</span>, <span class="fl">0.5</span>), <span class="at">perp =</span> <span class="fu">c</span>(<span class="fl">0.03</span>, <span class="fl">0.22</span>, <span class="sc">-</span><span class="fl">0.12</span>, <span class="sc">-</span><span class="fl">0.2</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(r0) <span class="sc">|&gt;</span></span>
+<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">F1 =</span> M1 <span class="sc">+</span> p <span class="sc">*</span> g1 <span class="sc">+</span> perp <span class="sc">*</span> n1, <span class="at">F2 =</span> M2 <span class="sc">+</span> p <span class="sc">*</span> g2 <span class="sc">+</span> perp <span class="sc">*</span> n2, <span class="at">s1 =</span> M1 <span class="sc">+</span> p <span class="sc">*</span> g1, <span class="at">s2 =</span> M2 <span class="sc">+</span> p <span class="sc">*</span> g2)</span>
+<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a>ticks1 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">p =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>), <span class="at">lab =</span> <span class="fu">c</span>(<span class="st">"−1"</span>, <span class="st">"+1"</span>)) <span class="sc">|&gt;</span> <span class="fu">bind_cols</span>(r0) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">t1 =</span> M1 <span class="sc">+</span> p <span class="sc">*</span> g1, <span class="at">t2 =</span> M2 <span class="sc">+</span> p <span class="sc">*</span> g2)</span>
+<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a>line_ends <span class="ot">&lt;-</span> r0 <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">a1 =</span> M1 <span class="sc">-</span> <span class="fl">1.3</span> <span class="sc">*</span> g1, <span class="at">a2 =</span> M2 <span class="sc">-</span> <span class="fl">1.3</span> <span class="sc">*</span> g2, <span class="at">b1 =</span> M1 <span class="sc">+</span> <span class="fl">1.6</span> <span class="sc">*</span> g1, <span class="at">b2 =</span> M2 <span class="sc">+</span> <span class="fl">1.6</span> <span class="sc">*</span> g2)</span>
+<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-18"><a href="#cb48-18" aria-hidden="true" tabindex="-1"></a>pa <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb48-19"><a href="#cb48-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data =</span> line_ends, <span class="fu">aes</span>(<span class="at">x =</span> a2, <span class="at">y =</span> a1, <span class="at">xend =</span> b2, <span class="at">yend =</span> b1), <span class="at">colour =</span> <span class="st">"grey30"</span>, <span class="at">linewidth =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb48-20"><a href="#cb48-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data =</span> ill, <span class="fu">aes</span>(<span class="at">x =</span> F2, <span class="at">y =</span> F1, <span class="at">xend =</span> s2, <span class="at">yend =</span> s1), <span class="at">linetype =</span> <span class="st">"dotted"</span>) <span class="sc">+</span></span>
+<span id="cb48-21"><a href="#cb48-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> ill, <span class="fu">aes</span>(s2, s1), <span class="at">shape =</span> <span class="dv">21</span>, <span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">size =</span> <span class="fl">2.5</span>) <span class="sc">+</span></span>
+<span id="cb48-22"><a href="#cb48-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> ticks1, <span class="fu">aes</span>(t2, t1), <span class="at">shape =</span> <span class="dv">3</span>, <span class="at">size =</span> <span class="fl">2.5</span>, <span class="at">colour =</span> <span class="st">"grey30"</span>) <span class="sc">+</span></span>
+<span id="cb48-23"><a href="#cb48-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> ticks1, <span class="fu">aes</span>(t2, t1, <span class="at">label =</span> lab), <span class="at">size =</span> <span class="fl">3.2</span>, <span class="at">colour =</span> <span class="st">"grey30"</span>, <span class="at">hjust =</span> <span class="fl">2.2</span>) <span class="sc">+</span></span>
+<span id="cb48-24"><a href="#cb48-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> ill, <span class="fu">aes</span>(F2, F1), <span class="at">size =</span> <span class="fl">3.2</span>, <span class="at">shape =</span> <span class="dv">21</span>, <span class="at">fill =</span> <span class="st">"black"</span>, <span class="at">colour =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
+<span id="cb48-25"><a href="#cb48-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> ill, <span class="fu">aes</span>(F2, F1, <span class="at">label =</span> id), <span class="at">vjust =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb48-26"><a href="#cb48-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> r0, <span class="fu">aes</span>(Y2, Y1), <span class="at">size =</span> <span class="fl">4.5</span>, <span class="at">shape =</span> <span class="dv">21</span>, <span class="at">fill =</span> age3_colours[[<span class="st">"young"</span>]]) <span class="sc">+</span></span>
+<span id="cb48-27"><a href="#cb48-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> r0, <span class="fu">aes</span>(O2, O1), <span class="at">size =</span> <span class="fl">4.5</span>, <span class="at">shape =</span> <span class="dv">21</span>, <span class="at">fill =</span> age3_colours[[<span class="st">"old"</span>]]) <span class="sc">+</span></span>
+<span id="cb48-28"><a href="#cb48-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> r0, <span class="fu">aes</span>(M2, M1), <span class="at">size =</span> <span class="fl">3.2</span>, <span class="at">shape =</span> <span class="dv">4</span>, <span class="at">stroke =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb48-29"><a href="#cb48-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> r0, <span class="fu">aes</span>(Y2, Y1, <span class="at">label =</span> <span class="st">"young average = −0.5"</span>), <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.15</span>, <span class="at">size =</span> <span class="fl">3.3</span>) <span class="sc">+</span></span>
+<span id="cb48-30"><a href="#cb48-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> r0, <span class="fu">aes</span>(O2, O1, <span class="at">label =</span> <span class="st">"old average = +0.5"</span>), <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.15</span>, <span class="at">size =</span> <span class="fl">3.3</span>) <span class="sc">+</span></span>
+<span id="cb48-31"><a href="#cb48-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> r0, <span class="fu">aes</span>(M2, M1, <span class="at">label =</span> <span class="st">"midpoint = 0"</span>), <span class="at">hjust =</span> <span class="fl">1.25</span>, <span class="at">size =</span> <span class="fl">3.3</span>) <span class="sc">+</span></span>
+<span id="cb48-32"><a href="#cb48-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_reverse</span>(<span class="at">limits =</span> <span class="fu">c</span>(r0<span class="sc">$</span>M2 <span class="sc">+</span> <span class="fl">0.5</span>, r0<span class="sc">$</span>M2 <span class="sc">-</span> <span class="fl">0.75</span>)) <span class="sc">+</span> <span class="fu">scale_y_reverse</span>(<span class="at">limits =</span> <span class="fu">c</span>(r0<span class="sc">$</span>M1 <span class="sc">+</span> <span class="fl">0.6</span>, r0<span class="sc">$</span>M1 <span class="sc">-</span> <span class="fl">0.6</span>)) <span class="sc">+</span></span>
+<span id="cb48-33"><a href="#cb48-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>() <span class="sc">+</span> <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb48-34"><a href="#cb48-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">sprintf</span>(<span class="st">"A. One moment of ɑʊ (%.0f%% of the vowel)"</span>, <span class="dv">100</span> <span class="sc">*</span> t0),</span>
+<span id="cb48-35"><a href="#cb48-35" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Block values real; A–D invented.</span><span class="sc">\n</span><span class="st">Dotted = projection; open circle = shadow."</span>,</span>
+<span id="cb48-36"><a href="#cb48-36" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"F2 (Lobanov 2.0 z)"</span>, <span class="at">y =</span> <span class="st">"F1 (Lobanov 2.0 z)"</span>)</span>
+<span id="cb48-37"><a href="#cb48-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-38"><a href="#cb48-38" aria-hidden="true" tabindex="-1"></a>sp0 <span class="ot">&lt;-</span> psc<span class="sc">$</span>speaker <span class="sc">|&gt;</span> <span class="fu">filter</span>(prop_time <span class="sc">==</span> t0) <span class="sc">|&gt;</span> <span class="fu">bind_cols</span>(r0) <span class="sc">|&gt;</span></span>
+<span id="cb48-39"><a href="#cb48-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">p =</span> ((F1 <span class="sc">-</span> M1) <span class="sc">*</span> g1 <span class="sc">+</span> (F2 <span class="sc">-</span> M2) <span class="sc">*</span> g2) <span class="sc">/</span> glen<span class="sc">^</span><span class="dv">2</span>,</span>
+<span id="cb48-40"><a href="#cb48-40" aria-hidden="true" tabindex="-1"></a>         <span class="at">row =</span> <span class="fu">factor</span>(Alter3, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"A–D (invented)"</span>, <span class="st">"young"</span>, <span class="st">"middle"</span>, <span class="st">"old"</span>)))</span>
+<span id="cb48-41"><a href="#cb48-41" aria-hidden="true" tabindex="-1"></a>ill <span class="ot">&lt;-</span> ill <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">row =</span> <span class="fu">factor</span>(<span class="st">"A–D (invented)"</span>, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"A–D (invented)"</span>, <span class="st">"young"</span>, <span class="st">"middle"</span>, <span class="st">"old"</span>)))</span>
+<span id="cb48-42"><a href="#cb48-42" aria-hidden="true" tabindex="-1"></a>pb <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(sp0, <span class="fu">aes</span>(p, row, <span class="at">colour =</span> Alter3)) <span class="sc">+</span></span>
+<span id="cb48-43"><a href="#cb48-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">height =</span> <span class="fl">0.2</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>, <span class="at">size =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb48-44"><a href="#cb48-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.5</span>, <span class="fl">0.5</span>), <span class="at">linetype =</span> <span class="st">"dotted"</span>) <span class="sc">+</span></span>
+<span id="cb48-45"><a href="#cb48-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> ill, <span class="at">colour =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb48-46"><a href="#cb48-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> ill, <span class="fu">aes</span>(<span class="at">label =</span> id), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">1.3</span>, <span class="at">colour =</span> <span class="st">"black"</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>) <span class="sc">+</span></span>
+<span id="cb48-47"><a href="#cb48-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> age3_colours, <span class="at">guide =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb48-48"><a href="#cb48-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>)) <span class="sc">+</span> <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb48-49"><a href="#cb48-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"B. The same projection for all 907 real women (one dot = one speaker, this one moment)"</span>,</span>
+<span id="cb48-50"><a href="#cb48-50" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Position = where the shadow falls, in units of the young–old distance; dotted lines = young (−0.5) and old (+0.5) block averages"</span>,</span>
+<span id="cb48-51"><a href="#cb48-51" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Position at this moment"</span>, <span class="at">y =</span> <span class="cn">NULL</span>)</span>
+<span id="cb48-52"><a href="#cb48-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-53"><a href="#cb48-53" aria-hidden="true" tabindex="-1"></a>tt <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(<span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="fl">0.7</span>, <span class="fl">0.9</span>), \(x) <span class="fu">ref_t</span>(<span class="fu">near_t</span>(x)) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">t =</span> <span class="fu">near_t</span>(x)))</span>
+<span id="cb48-54"><a href="#cb48-54" aria-hidden="true" tabindex="-1"></a>pc <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb48-55"><a href="#cb48-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>(<span class="at">data =</span> psc<span class="sc">$</span>block <span class="sc">|&gt;</span> <span class="fu">filter</span>(Alter3 <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"young"</span>, <span class="st">"old"</span>), prop_time <span class="sc">&gt;=</span> <span class="fl">0.1</span>, prop_time <span class="sc">&lt;=</span> <span class="fl">0.9</span>),</span>
+<span id="cb48-56"><a href="#cb48-56" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(F2, F1, <span class="at">colour =</span> Alter3, <span class="at">group =</span> Alter3), <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb48-57"><a href="#cb48-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data =</span> tt, <span class="fu">aes</span>(<span class="at">x =</span> Y2, <span class="at">y =</span> Y1, <span class="at">xend =</span> O2, <span class="at">yend =</span> O1), <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="fl">0.08</span>, <span class="st">"in"</span>), <span class="at">type =</span> <span class="st">"closed"</span>)) <span class="sc">+</span></span>
+<span id="cb48-58"><a href="#cb48-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> tt, <span class="fu">aes</span>(<span class="at">x =</span> M2, <span class="at">y =</span> M1, <span class="at">label =</span> <span class="fu">sprintf</span>(<span class="st">"%.0f%%"</span>, <span class="dv">100</span> <span class="sc">*</span> t)), <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">size =</span> <span class="fl">3.3</span>) <span class="sc">+</span></span>
+<span id="cb48-59"><a href="#cb48-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> age3_colours, <span class="at">name =</span> <span class="st">"Block average track"</span>) <span class="sc">+</span></span>
+<span id="cb48-60"><a href="#cb48-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_reverse</span>(<span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fl">0.25</span>)) <span class="sc">+</span> <span class="fu">scale_y_reverse</span>() <span class="sc">+</span> <span class="fu">coord_fixed</span>() <span class="sc">+</span> <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb48-61"><a href="#cb48-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>) <span class="sc">+</span></span>
+<span id="cb48-62"><a href="#cb48-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"C. Young → old arrow over time"</span>,</span>
+<span id="cb48-63"><a href="#cb48-63" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Long early (mostly F1), almost zero later"</span>,</span>
+<span id="cb48-64"><a href="#cb48-64" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"F2 (Lobanov 2.0 z)"</span>, <span class="at">y =</span> <span class="st">"F1 (Lobanov 2.0 z)"</span>)</span>
+<span id="cb48-65"><a href="#cb48-65" aria-hidden="true" tabindex="-1"></a>((pa <span class="sc">|</span> pc) <span class="sc">/</span> pb) <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">heights =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="fl">1.5</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -4305,25 +3983,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p><strong>Example: what a position means acoustically, for <code>ɑʊ</code>.</strong> A position is a recipe for a track: a speaker at position <em>p</em> has, at every time point, F1 and F2 equal to the midpoint track plus <em>p</em> times the old − young difference (if the speaker deviates exactly along the change). The figure draws these tracks for positions −1, −0.5, 0, +0.5 and +1.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>ll <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"laggard_leader_tracks_age3.rds"</span>)   <span class="co"># gender-averaged block tracks (young_block, old_block)</span></span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>ex <span class="ot">&lt;-</span> ll<span class="sc">$</span>tracks <span class="sc">|&gt;</span></span>
-<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(label <span class="sc">==</span> <span class="st">"ɑʊ"</span>, track <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"young_block"</span>, <span class="st">"old_block"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> prop_time, <span class="at">names_from =</span> track, <span class="at">values_from =</span> <span class="fu">c</span>(F1, F2))</span>
-<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a><span class="fu">expand_grid</span>(<span class="at">position =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="sc">-</span><span class="fl">0.5</span>, <span class="dv">0</span>, <span class="fl">0.5</span>, <span class="dv">1</span>), ex) <span class="sc">|&gt;</span></span>
-<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">F1 =</span> (F1_young_block <span class="sc">+</span> F1_old_block) <span class="sc">/</span> <span class="dv">2</span> <span class="sc">+</span> position <span class="sc">*</span> (F1_old_block <span class="sc">-</span> F1_young_block),</span>
-<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">F2 =</span> (F2_young_block <span class="sc">+</span> F2_old_block) <span class="sc">/</span> <span class="dv">2</span> <span class="sc">+</span> position <span class="sc">*</span> (F2_old_block <span class="sc">-</span> F2_young_block)) <span class="sc">|&gt;</span></span>
-<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">c</span>(F1, F2), <span class="at">names_to =</span> <span class="st">"formant"</span>, <span class="at">values_to =</span> <span class="st">"value"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(prop_time, value, <span class="at">colour =</span> position, <span class="at">group =</span> position)) <span class="sc">+</span></span>
-<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="at">linetype =</span> <span class="st">"dotted"</span>, <span class="at">colour =</span> <span class="st">"grey55"</span>, <span class="at">linewidth =</span> <span class="fl">0.35</span>) <span class="sc">+</span></span>
-<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="fl">0.9</span>) <span class="sc">+</span></span>
-<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_gradient2</span>(<span class="at">low =</span> <span class="st">"#2166AC"</span>, <span class="at">mid =</span> <span class="st">"grey60"</span>, <span class="at">high =</span> <span class="st">"#B2182B"</span>, <span class="at">midpoint =</span> <span class="dv">0</span>, <span class="at">breaks =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="sc">-</span><span class="fl">0.5</span>, <span class="dv">0</span>, <span class="fl">0.5</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb52-13"><a href="#cb52-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>, <span class="dv">1</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"0"</span>, <span class="st">"0.5"</span>, <span class="st">"1"</span>)) <span class="sc">+</span></span>
-<span id="cb52-14"><a href="#cb52-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(formant <span class="sc">~</span> ., <span class="at">scales =</span> <span class="st">"free_y"</span>, <span class="at">labeller =</span> formant_labeller) <span class="sc">+</span></span>
-<span id="cb52-15"><a href="#cb52-15" aria-hidden="true" tabindex="-1"></a>  formant_pos_scales <span class="sc">+</span></span>
-<span id="cb52-16"><a href="#cb52-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb52-17"><a href="#cb52-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ɑʊ: the tracks that correspond to positions −1 … +1"</span>,</span>
-<span id="cb52-18"><a href="#cb52-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"−0.5 = young block average, +0.5 = old block average, 0 = midpoint track"</span>,</span>
-<span id="cb52-19"><a href="#cb52-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Proportional time"</span>, <span class="at">y =</span> <span class="st">"Lobanov 2.0 z-score"</span>, <span class="at">colour =</span> <span class="st">"Position"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>ll <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"laggard_leader_tracks_age3.rds"</span>)   <span class="co"># gender-averaged block tracks (young_block, old_block)</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>ex <span class="ot">&lt;-</span> ll<span class="sc">$</span>tracks <span class="sc">|&gt;</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(label <span class="sc">==</span> <span class="st">"ɑʊ"</span>, track <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"young_block"</span>, <span class="st">"old_block"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> prop_time, <span class="at">names_from =</span> track, <span class="at">values_from =</span> <span class="fu">c</span>(F1, F2))</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a><span class="fu">expand_grid</span>(<span class="at">position =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="sc">-</span><span class="fl">0.5</span>, <span class="dv">0</span>, <span class="fl">0.5</span>, <span class="dv">1</span>), ex) <span class="sc">|&gt;</span></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">F1 =</span> (F1_young_block <span class="sc">+</span> F1_old_block) <span class="sc">/</span> <span class="dv">2</span> <span class="sc">+</span> position <span class="sc">*</span> (F1_old_block <span class="sc">-</span> F1_young_block),</span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">F2 =</span> (F2_young_block <span class="sc">+</span> F2_old_block) <span class="sc">/</span> <span class="dv">2</span> <span class="sc">+</span> position <span class="sc">*</span> (F2_old_block <span class="sc">-</span> F2_young_block)) <span class="sc">|&gt;</span></span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">c</span>(F1, F2), <span class="at">names_to =</span> <span class="st">"formant"</span>, <span class="at">values_to =</span> <span class="st">"value"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(prop_time, value, <span class="at">colour =</span> position, <span class="at">group =</span> position)) <span class="sc">+</span></span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>), <span class="at">linetype =</span> <span class="st">"dotted"</span>, <span class="at">colour =</span> <span class="st">"grey55"</span>, <span class="at">linewidth =</span> <span class="fl">0.35</span>) <span class="sc">+</span></span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="fl">0.9</span>) <span class="sc">+</span></span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_gradient2</span>(<span class="at">low =</span> <span class="st">"#2166AC"</span>, <span class="at">mid =</span> <span class="st">"grey60"</span>, <span class="at">high =</span> <span class="st">"#B2182B"</span>, <span class="at">midpoint =</span> <span class="dv">0</span>, <span class="at">breaks =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="sc">-</span><span class="fl">0.5</span>, <span class="dv">0</span>, <span class="fl">0.5</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>, <span class="dv">1</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"0"</span>, <span class="st">"0.5"</span>, <span class="st">"1"</span>)) <span class="sc">+</span></span>
+<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(formant <span class="sc">~</span> ., <span class="at">scales =</span> <span class="st">"free_y"</span>, <span class="at">labeller =</span> formant_labeller) <span class="sc">+</span></span>
+<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a>  formant_pos_scales <span class="sc">+</span></span>
+<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ɑʊ: the tracks that correspond to positions −1 … +1"</span>,</span>
+<span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"−0.5 = young block average, +0.5 = old block average, 0 = midpoint track"</span>,</span>
+<span id="cb49-19"><a href="#cb49-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Proportional time"</span>, <span class="at">y =</span> <span class="st">"Lobanov 2.0 z-score"</span>, <span class="at">colour =</span> <span class="st">"Position"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -4341,574 +4019,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Cruder estimates bracket these values.</strong> With the speakers’ own token means (noisy, spread too large) d is 0.3–1.5, with the posterior means of the speaker deviations (shrunk, spread too small) 0.7–3.0; the per-draw values lie between the two for every vowel.</li>
 <li><strong>Limits.</strong> The positions use the formant tracks over 10–90% only. The within-block spread rests on the model’s assumption that speakers vary around their block with one common, normally distributed spread per vowel: a different spread in the old and the young block, or skewed distributions, cannot show up in the per-draw positions (the token means make no such assumption and are the check). The F1 normalisation caveat from the difference-curve section applies here too.</li>
 </ul>
-</section>
-<section id="covariation-across-vowels-principal-components-of-speaker-intercepts" class="level1" data-number="8">
-<h1 data-number="8"><span class="header-section-number">8</span> Covariation across vowels: principal components of speaker intercepts</h1>
-<p>The sections above treat each vowel on its own. This section asks whether speakers who differ from the community on one vowel also differ on others, and in which direction. It follows Brand et al.&nbsp;(2021) and Wilson Black et al.&nbsp;(2023) and is cached by <code>pca_covariation_age3_6v.R</code> (<code>pca_age3_6v_vowelspace.rds</code>, <code>pca_test_age3_6v.rds</code>); nothing is refit here.</p>
-<p><strong>Input.</strong> The analysis is restricted to the <strong>six low vowels</strong>: the monophthongs <code>æ</code>, <code>aː</code> and <code>ɑ</code>, and the diphthongs <code>ɑɪ</code>, <code>ɑʊ</code> and <code>æːɪ</code>. For every speaker, the random-intercept deviation <code>(1 | speaker_id)</code> from each vowel’s age3 fit, which is already net of age block and gender, is taken (5 DCT coefficients × 2 formants) and reconstructed with the inverse DCT at <strong>one proportional time</strong>: the <strong>midpoint (50%) for the monophthongs</strong> and <strong>the point of highest F1 for each diphthong</strong>, i.e.&nbsp;the open nucleus that marks the onset target before the glide closes: 29% for <code>æːɪ</code>, 27.5% for <code>ɑɪ</code> and 18% for <code>ɑʊ</code> (the maximum of the population-mean F1 track inside the 10–90% window). (An earlier version used a fixed 17.5% for all three; the results below replace it.) That gives 6 vowels × 2 formants = 12 variables for the 1,283 speakers who have all six vowels. Because age block and gender are removed beforehand, the components describe covariation between speakers <em>within</em> age block and gender, not the age effect itself (see the age-direction table below for how each vowel’s age effect points).</p>
-<p><strong>Inference and how to read the loading plots.</strong> <code>nzilbb.vowels::pca_test()</code> compares each component’s variance explained with a permutation null (the data with every column shuffled independently); only components above the null are interpreted. It also gives every variable’s <em>index loading</em> (the loading weighted by the variance the component explains; Vieira 2012) with two reference distributions, shown in the loading plots below:</p>
-<ul>
-<li>the <strong>blue band</strong> is the null: the index loadings obtained when the columns are shuffled, i.e.&nbsp;what a variable would show by chance;</li>
-<li>the <strong>red bar</strong> is the 90% interval of the index loading over 200 bootstrap resamples of the speakers, i.e.&nbsp;how much the loading moves with a different sample of speakers;</li>
-<li>the <strong>black mark</strong> is the observed index loading (+ or − gives its sign).</li>
-</ul>
-<p>Following the guidance of the package authors (Wilson Black et al.&nbsp;2023, the “Model to PCA workflow” vignette of <code>nzilbb.vowels</code>), a variable is <strong>ignored when its black mark lies below the blue band</strong> (it loads no more than chance would produce), and a variable whose <strong>red bar reaches down to about zero</strong> is one that only happens to correlate with the others in this sample and should not be part of a claimed pattern. A red bar that merely overlaps the blue band is not in itself a reason for exclusion (the test against the null is the black mark); a red bar that starts near zero is. The vignette itself notes that the plots give clear advice on what to exclude but not on what to include. Both rules are applied explicitly below.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># loaded here as well as in the setup chunk, so this section also runs on its own</span></span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggrepel)</span>
-<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nzilbb.vowels)</span>
-<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>pca6 <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"pca_age3_6v_vowelspace.rds"</span>)</span>
-<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>pca6_test <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"pca_test_age3_6v.rds"</span>)</span>
-<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>sig_pcs <span class="ot">&lt;-</span> pca6<span class="sc">$</span>sig_pcs</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_variance_explained</span>(pca6_test, <span class="at">pc_max =</span> <span class="dv">12</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="paper_figures_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Four components explain more variance than the permutation null (18.5%, 17.8%, 13.7% and 11.6%; the fifth, 7.0%, does not). The table lists, for each, the variables that load most strongly (sign = direction in the Lobanov-2.0 intercept; vowels loading with the same sign covary positively across speakers, opposite signs covary inversely).</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>pca6<span class="sc">$</span>loadings <span class="sc">|&gt;</span></span>
-<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>var, <span class="at">names_to =</span> <span class="st">"PC"</span>, <span class="at">values_to =</span> <span class="st">"loading"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">var =</span> <span class="fu">str_replace_all</span>(var, <span class="fu">c</span>(<span class="st">"_diph_"</span> <span class="ot">=</span> <span class="st">" "</span>, <span class="st">"_mono_"</span> <span class="ot">=</span> <span class="st">" "</span>)),</span>
-<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">ipa =</span> pca6<span class="sc">$</span>vowel_labels[<span class="fu">str_extract</span>(var, <span class="st">"(?&lt;= ).*"</span>)]) <span class="sc">|&gt;</span></span>
-<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">var =</span> <span class="fu">paste0</span>(<span class="fu">str_extract</span>(var, <span class="st">"^F[12]"</span>), <span class="st">" "</span>, ipa)) <span class="sc">|&gt;</span></span>
-<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(<span class="fu">abs</span>(loading), <span class="at">n =</span> <span class="dv">6</span>, <span class="at">by =</span> PC) <span class="sc">|&gt;</span></span>
-<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(PC, <span class="fu">desc</span>(<span class="fu">abs</span>(loading))) <span class="sc">|&gt;</span></span>
-<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">`</span><span class="at">Strongest loadings</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">paste0</span>(var, <span class="st">" ("</span>, <span class="fu">sprintf</span>(<span class="st">"%+.2f"</span>, loading), <span class="st">")"</span>, <span class="at">collapse =</span> <span class="st">", "</span>), <span class="at">.by =</span> PC) <span class="sc">|&gt;</span></span>
-<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(pca6<span class="sc">$</span>variance <span class="sc">|&gt;</span> <span class="fu">transmute</span>(<span class="at">PC =</span> <span class="fu">as.character</span>(PC), <span class="st">`</span><span class="at">Variance explained</span><span class="st">`</span> <span class="ot">=</span> scales<span class="sc">::</span><span class="fu">percent</span>(variance_explained, <span class="fl">0.1</span>)), <span class="at">by =</span> <span class="st">"PC"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(PC, <span class="st">`</span><span class="at">Variance explained</span><span class="st">`</span>, <span class="st">`</span><span class="at">Strongest loadings</span><span class="st">`</span>) <span class="sc">|&gt;</span></span>
-<span id="cb55-11"><a href="#cb55-11" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"Significant principal components of speaker intercepts (age3, six low vowels)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<table class="caption-top table table-sm table-striped small">
-<caption>Significant principal components of speaker intercepts (age3, six low vowels)</caption>
-<colgroup>
-<col style="width: 3%">
-<col style="width: 16%">
-<col style="width: 79%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">PC</th>
-<th style="text-align: left;">Variance explained</th>
-<th style="text-align: left;">Strongest loadings</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">PC1</td>
-<td style="text-align: left;">18.5%</td>
-<td style="text-align: left;">F2 NA (-0.49), F2 NA (-0.48), F2 NA (-0.45), F1 NA (+0.28), F1 NA (+0.27), F2 NA (+0.22)</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">PC2</td>
-<td style="text-align: left;">17.8%</td>
-<td style="text-align: left;">F2 NA (+0.52), F2 NA (+0.43), F1 NA (-0.39), F2 NA (+0.37), F1 NA (-0.33), F1 NA (-0.29)</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">PC3</td>
-<td style="text-align: left;">13.7%</td>
-<td style="text-align: left;">F1 NA (-0.44), F1 NA (-0.41), F1 NA (-0.39), F1 NA (-0.37), F2 NA (-0.35), F1 NA (-0.30)</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">PC4</td>
-<td style="text-align: left;">11.6%</td>
-<td style="text-align: left;">F1 NA (-0.44), F1 NA (-0.39), F2 NA (+0.39), F1 NA (-0.38), F1 NA (+0.36), F1 NA (+0.35)</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><strong>Are the loadings reliable?</strong> The loadings table above lists the largest loadings of each component, but a large loading is not necessarily a stable one. Two checks follow.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>stable_min <span class="ot">&lt;-</span> <span class="fl">0.10</span>   <span class="co"># a loading counts as stable if it is above the null AND its (filtered) bootstrap lower bound is above this</span></span>
-<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>pc_names <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"PC"</span>, sig_pcs)</span>
-<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>ipa_of <span class="ot">&lt;-</span> \(v) pca6<span class="sc">$</span>vowel_labels[<span class="fu">str_remove</span>(v, <span class="st">"^F[12]_"</span>)]</span>
-<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a><span class="co"># (1) is the component recovered when speakers are resampled? |cosine| between the bootstrapped and the</span></span>
-<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a><span class="co">#     full-sample loading vector (1 = same component, 0 = unrelated)</span></span>
-<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a>raw_b <span class="ot">&lt;-</span> pca6_test<span class="sc">$</span>raw_data <span class="sc">|&gt;</span> <span class="fu">filter</span>(source <span class="sc">==</span> <span class="st">"bootstrapped"</span>, PC <span class="sc">%in%</span> pc_names)</span>
-<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a>orig <span class="ot">&lt;-</span> pca6<span class="sc">$</span>loadings <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="sc">-</span>var, <span class="at">names_to =</span> <span class="st">"PC"</span>, <span class="at">values_to =</span> <span class="st">"orig"</span>) <span class="sc">|&gt;</span> <span class="fu">rename</span>(<span class="at">variable =</span> var)</span>
-<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a>recovery <span class="ot">&lt;-</span> raw_b <span class="sc">|&gt;</span></span>
-<span id="cb56-10"><a href="#cb56-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(iteration, PC, variable, loading) <span class="sc">|&gt;</span></span>
-<span id="cb56-11"><a href="#cb56-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(orig, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"variable"</span>, <span class="st">"PC"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb56-12"><a href="#cb56-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">cos =</span> <span class="fu">abs</span>(<span class="fu">sum</span>(loading <span class="sc">*</span> orig) <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>(loading<span class="sc">^</span><span class="dv">2</span>) <span class="sc">*</span> <span class="fu">sum</span>(orig<span class="sc">^</span><span class="dv">2</span>))), <span class="at">.by =</span> <span class="fu">c</span>(iteration, PC)) <span class="sc">|&gt;</span></span>
-<span id="cb56-13"><a href="#cb56-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">median_cos =</span> <span class="fu">median</span>(cos), <span class="at">share_09 =</span> <span class="fu">mean</span>(cos <span class="sc">&gt;</span> <span class="fl">0.9</span>), <span class="at">share_05 =</span> <span class="fu">mean</span>(cos <span class="sc">&lt;</span> <span class="fl">0.5</span>), <span class="at">.by =</span> PC)</span>
-<span id="cb56-14"><a href="#cb56-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb56-15"><a href="#cb56-15" aria-hidden="true" tabindex="-1"></a><span class="co"># (2) bootstrap intervals restricted to the resamples in which the component is recognisably the same one:</span></span>
-<span id="cb56-16"><a href="#cb56-16" aria-hidden="true" tabindex="-1"></a><span class="co">#     the rule of plot_loadings(filter_boots = TRUE) keeps the resamples in which the variable with the highest</span></span>
-<span id="cb56-17"><a href="#cb56-17" aria-hidden="true" tabindex="-1"></a><span class="co">#     median index loading is above the 25th percentile of its own bootstrap distribution</span></span>
-<span id="cb56-18"><a href="#cb56-18" aria-hidden="true" tabindex="-1"></a>filt <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(pc_names, \(pc) {</span>
-<span id="cb56-19"><a href="#cb56-19" aria-hidden="true" tabindex="-1"></a>  b <span class="ot">&lt;-</span> raw_b <span class="sc">|&gt;</span> <span class="fu">filter</span>(PC <span class="sc">==</span> pc) <span class="sc">|&gt;</span> <span class="fu">select</span>(iteration, variable, index_loading)</span>
-<span id="cb56-20"><a href="#cb56-20" aria-hidden="true" tabindex="-1"></a>  top <span class="ot">&lt;-</span> b <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="at">m =</span> <span class="fu">median</span>(index_loading), <span class="at">.by =</span> variable) <span class="sc">|&gt;</span> <span class="fu">slice_max</span>(m, <span class="at">n =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span> <span class="fu">pull</span>(variable)</span>
-<span id="cb56-21"><a href="#cb56-21" aria-hidden="true" tabindex="-1"></a>  keep <span class="ot">&lt;-</span> b <span class="sc">|&gt;</span> <span class="fu">filter</span>(variable <span class="sc">==</span> top, index_loading <span class="sc">&gt;</span> <span class="fu">quantile</span>(index_loading[variable <span class="sc">==</span> top], <span class="fl">0.25</span>)) <span class="sc">|&gt;</span> <span class="fu">pull</span>(iteration)</span>
-<span id="cb56-22"><a href="#cb56-22" aria-hidden="true" tabindex="-1"></a>  b <span class="sc">|&gt;</span> <span class="fu">filter</span>(iteration <span class="sc">%in%</span> keep) <span class="sc">|&gt;</span></span>
-<span id="cb56-23"><a href="#cb56-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">f_lo =</span> <span class="fu">quantile</span>(index_loading, <span class="fl">0.05</span>), <span class="at">f_hi =</span> <span class="fu">quantile</span>(index_loading, <span class="fl">0.95</span>), <span class="at">.by =</span> variable) <span class="sc">|&gt;</span></span>
-<span id="cb56-24"><a href="#cb56-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">PC =</span> pc)</span>
-<span id="cb56-25"><a href="#cb56-25" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb56-26"><a href="#cb56-26" aria-hidden="true" tabindex="-1"></a>stab <span class="ot">&lt;-</span> pca6_test<span class="sc">$</span>loadings <span class="sc">|&gt;</span> <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
-<span id="cb56-27"><a href="#cb56-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(PC <span class="sc">%in%</span> pc_names) <span class="sc">|&gt;</span></span>
-<span id="cb56-28"><a href="#cb56-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(PC, variable, index_loading, high_null, low_confint, sig_loading) <span class="sc">|&gt;</span></span>
-<span id="cb56-29"><a href="#cb56-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(filt, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"PC"</span>, <span class="st">"variable"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb56-30"><a href="#cb56-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">status =</span> <span class="fu">if_else</span>(sig_loading <span class="sc">&amp;</span> f_lo <span class="sc">&gt;</span> stable_min, <span class="st">"stable"</span>, <span class="st">"not stable"</span>),</span>
-<span id="cb56-31"><a href="#cb56-31" aria-hidden="true" tabindex="-1"></a>         <span class="at">vowel =</span> <span class="fu">str_remove</span>(variable, <span class="st">"^F[12]_"</span>), <span class="at">formant =</span> <span class="fu">str_extract</span>(variable, <span class="st">"^F[12]"</span>))</span>
-<span id="cb56-32"><a href="#cb56-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb56-33"><a href="#cb56-33" aria-hidden="true" tabindex="-1"></a>recovery <span class="sc">|&gt;</span></span>
-<span id="cb56-34"><a href="#cb56-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(pca6<span class="sc">$</span>variance <span class="sc">|&gt;</span> <span class="fu">transmute</span>(<span class="at">PC =</span> <span class="fu">as.character</span>(PC), <span class="at">var_expl =</span> variance_explained), <span class="at">by =</span> <span class="st">"PC"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb56-35"><a href="#cb56-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(<span class="at">Component =</span> PC, <span class="st">`</span><span class="at">Variance explained</span><span class="st">`</span> <span class="ot">=</span> scales<span class="sc">::</span><span class="fu">percent</span>(var_expl, <span class="fl">0.1</span>),</span>
-<span id="cb56-36"><a href="#cb56-36" aria-hidden="true" tabindex="-1"></a>            <span class="st">`</span><span class="at">Median |cosine| with full-sample component</span><span class="st">`</span> <span class="ot">=</span> median_cos,</span>
-<span id="cb56-37"><a href="#cb56-37" aria-hidden="true" tabindex="-1"></a>            <span class="st">`</span><span class="at">Resamples with |cosine| &gt; 0.9</span><span class="st">`</span> <span class="ot">=</span> scales<span class="sc">::</span><span class="fu">percent</span>(share_09, <span class="dv">1</span>),</span>
-<span id="cb56-38"><a href="#cb56-38" aria-hidden="true" tabindex="-1"></a>            <span class="st">`</span><span class="at">Resamples with |cosine| &lt; 0.5</span><span class="st">`</span> <span class="ot">=</span> scales<span class="sc">::</span><span class="fu">percent</span>(share_05, <span class="dv">1</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb56-39"><a href="#cb56-39" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">2</span>, <span class="at">caption =</span> <span class="st">"Recovery of each component across 200 bootstrap resamples of the speakers"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<table class="caption-top table table-sm table-striped small">
-<caption>Recovery of each component across 200 bootstrap resamples of the speakers</caption>
-<colgroup>
-<col style="width: 6%">
-<col style="width: 11%">
-<col style="width: 32%">
-<col style="width: 24%">
-<col style="width: 24%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Component</th>
-<th style="text-align: left;">Variance explained</th>
-<th style="text-align: right;">Median |cosine| with full-sample component</th>
-<th style="text-align: left;">Resamples with |cosine| &gt; 0.9</th>
-<th style="text-align: left;">Resamples with |cosine| &lt; 0.5</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">PC1</td>
-<td style="text-align: left;">18.5%</td>
-<td style="text-align: right;">0.90</td>
-<td style="text-align: left;">50%</td>
-<td style="text-align: left;">19%</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">PC2</td>
-<td style="text-align: left;">17.8%</td>
-<td style="text-align: right;">0.90</td>
-<td style="text-align: left;">49%</td>
-<td style="text-align: left;">18%</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">PC3</td>
-<td style="text-align: left;">13.7%</td>
-<td style="text-align: right;">0.97</td>
-<td style="text-align: left;">86%</td>
-<td style="text-align: left;">0%</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">PC4</td>
-<td style="text-align: left;">11.6%</td>
-<td style="text-align: right;">0.98</td>
-<td style="text-align: left;">92%</td>
-<td style="text-align: left;">0%</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><strong>(1) Recovery of the components.</strong> PC1 and PC2 are almost equally strong (18.5% and 17.8% of the variance), so the data hardly separate them: in only about 50% of the resamples does the resampled PC1 (PC2) resemble the full-sample one (|cosine| &gt; 0.9), and in about 18% it is a clearly different mixture of the two (|cosine| &lt; 0.5). A principal component is only defined up to such rotations when its neighbour has nearly the same variance, so <strong>PC1 and PC2 should be read as a pair (a plane), not as two separate axes</strong>. PC3 (13.7%) and PC4 (11.6%) are recovered in 86% and 92% of the resamples. This is also why the red bars of PC1 and PC2 in the plots below all start at about zero: in the resamples in which the components have swapped or mixed, a variable’s loading on “PC1” is small.</p>
-<p><strong>(2) Which loadings are stable?</strong> Applying the rules of the package authors to the unfiltered bootstrap bars (left panels below): for PC1, 5 of the 12 variables are above the blue null band, for PC2 six, for PC3 four and for PC4 one; but <strong>the red bar of every variable on PC1 and PC2 reaches down to 0.00–0.08</strong>, and in none of the four components does a lower bound exceed the null band. Strictly applied to these unfiltered bars, the “red bar near zero” rule would leave nothing to interpret on PC1 and PC2. The package therefore offers <code>filter_boots = TRUE</code> for unstable components (right panels): only the resamples in which the component’s top variable is above the 25th percentile of its own bootstrap distribution are kept, which reveals which variables go together <em>when the component is recovered</em> (the same conditional bootstrap that Hurring et al.&nbsp;2025 use for an unstable component). A loading is called <strong>stable</strong> here if it is above the null band <strong>and</strong> the lower bound of its filtered 90% interval is above 0.10 (the threshold is a convention of this notebook, not of the package; <code>F1 aː</code> on PC3, 0.08, is above the null band but falls short of it).</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>stab <span class="sc">|&gt;</span></span>
-<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(sig_loading) <span class="sc">|&gt;</span></span>
-<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(PC, <span class="fu">desc</span>(index_loading)) <span class="sc">|&gt;</span></span>
-<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(</span>
-<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Component =</span> PC, <span class="at">Variable =</span> <span class="fu">paste</span>(formant, <span class="fu">ipa_of</span>(variable)),</span>
-<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Index loading</span><span class="st">`</span> <span class="ot">=</span> index_loading, <span class="st">`</span><span class="at">Null band, upper</span><span class="st">`</span> <span class="ot">=</span> high_null,</span>
-<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Bootstrap lower bound, all resamples</span><span class="st">`</span> <span class="ot">=</span> low_confint,</span>
-<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Bootstrap lower bound, filtered</span><span class="st">`</span> <span class="ot">=</span> f_lo, <span class="at">Status =</span> status</span>
-<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">2</span>, <span class="at">caption =</span> <span class="st">"Variables whose observed index loading is above the null band, with their bootstrap lower bounds and stability status"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<table class="caption-top table table-sm table-striped small">
-<caption>Variables whose observed index loading is above the null band, with their bootstrap lower bounds and stability status</caption>
-<colgroup>
-<col style="width: 7%">
-<col style="width: 6%">
-<col style="width: 10%">
-<col style="width: 13%">
-<col style="width: 28%">
-<col style="width: 24%">
-<col style="width: 8%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Component</th>
-<th style="text-align: left;">Variable</th>
-<th style="text-align: right;">Index loading</th>
-<th style="text-align: right;">Null band, upper</th>
-<th style="text-align: right;">Bootstrap lower bound, all resamples</th>
-<th style="text-align: right;">Bootstrap lower bound, filtered</th>
-<th style="text-align: left;">Status</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">PC1</td>
-<td style="text-align: left;">F2 æ</td>
-<td style="text-align: right;">1.18</td>
-<td style="text-align: right;">0.33</td>
-<td style="text-align: right;">0.06</td>
-<td style="text-align: right;">0.70</td>
-<td style="text-align: left;">stable</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">PC1</td>
-<td style="text-align: left;">F2 æːɪ</td>
-<td style="text-align: right;">1.13</td>
-<td style="text-align: right;">0.33</td>
-<td style="text-align: right;">0.04</td>
-<td style="text-align: right;">0.49</td>
-<td style="text-align: left;">stable</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">PC1</td>
-<td style="text-align: left;">F2 aː</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">0.34</td>
-<td style="text-align: right;">0.08</td>
-<td style="text-align: right;">0.50</td>
-<td style="text-align: left;">stable</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">PC1</td>
-<td style="text-align: left;">F1 ɑʊ</td>
-<td style="text-align: right;">0.38</td>
-<td style="text-align: right;">0.35</td>
-<td style="text-align: right;">0.01</td>
-<td style="text-align: right;">0.15</td>
-<td style="text-align: left;">stable</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">PC1</td>
-<td style="text-align: left;">F1 ɑ</td>
-<td style="text-align: right;">0.37</td>
-<td style="text-align: right;">0.31</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">0.04</td>
-<td style="text-align: left;">not stable</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">PC2</td>
-<td style="text-align: left;">F2 ɑ</td>
-<td style="text-align: right;">1.25</td>
-<td style="text-align: right;">0.32</td>
-<td style="text-align: right;">0.03</td>
-<td style="text-align: right;">0.60</td>
-<td style="text-align: left;">stable</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">PC2</td>
-<td style="text-align: left;">F2 ɑɪ</td>
-<td style="text-align: right;">0.84</td>
-<td style="text-align: right;">0.33</td>
-<td style="text-align: right;">0.01</td>
-<td style="text-align: right;">0.30</td>
-<td style="text-align: left;">stable</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">PC2</td>
-<td style="text-align: left;">F1 æ</td>
-<td style="text-align: right;">0.70</td>
-<td style="text-align: right;">0.34</td>
-<td style="text-align: right;">0.02</td>
-<td style="text-align: right;">0.22</td>
-<td style="text-align: left;">stable</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">PC2</td>
-<td style="text-align: left;">F2 ɑʊ</td>
-<td style="text-align: right;">0.61</td>
-<td style="text-align: right;">0.31</td>
-<td style="text-align: right;">0.03</td>
-<td style="text-align: right;">0.16</td>
-<td style="text-align: left;">stable</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">PC2</td>
-<td style="text-align: left;">F1 aː</td>
-<td style="text-align: right;">0.50</td>
-<td style="text-align: right;">0.34</td>
-<td style="text-align: right;">0.02</td>
-<td style="text-align: right;">0.08</td>
-<td style="text-align: left;">not stable</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">PC2</td>
-<td style="text-align: left;">F1 æːɪ</td>
-<td style="text-align: right;">0.37</td>
-<td style="text-align: right;">0.34</td>
-<td style="text-align: right;">0.01</td>
-<td style="text-align: right;">0.01</td>
-<td style="text-align: left;">not stable</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">PC3</td>
-<td style="text-align: left;">F1 ɑɪ</td>
-<td style="text-align: right;">0.51</td>
-<td style="text-align: right;">0.38</td>
-<td style="text-align: right;">0.09</td>
-<td style="text-align: right;">0.35</td>
-<td style="text-align: left;">stable</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">PC3</td>
-<td style="text-align: left;">F1 ɑ</td>
-<td style="text-align: right;">0.47</td>
-<td style="text-align: right;">0.31</td>
-<td style="text-align: right;">0.08</td>
-<td style="text-align: right;">0.31</td>
-<td style="text-align: left;">stable</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">PC3</td>
-<td style="text-align: left;">F1 aː</td>
-<td style="text-align: right;">0.41</td>
-<td style="text-align: right;">0.32</td>
-<td style="text-align: right;">0.09</td>
-<td style="text-align: right;">0.08</td>
-<td style="text-align: left;">not stable</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">PC3</td>
-<td style="text-align: left;">F1 æːɪ</td>
-<td style="text-align: right;">0.36</td>
-<td style="text-align: right;">0.31</td>
-<td style="text-align: right;">0.15</td>
-<td style="text-align: right;">0.15</td>
-<td style="text-align: left;">stable</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">PC4</td>
-<td style="text-align: left;">F1 ɑʊ</td>
-<td style="text-align: right;">0.37</td>
-<td style="text-align: right;">0.28</td>
-<td style="text-align: right;">0.20</td>
-<td style="text-align: right;">0.30</td>
-<td style="text-align: left;">stable</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p>Loading plots: left, all 200 bootstrap resamples; right, <code>filter_boots = TRUE</code>. Black mark = observed index loading, red = 90% bootstrap interval, blue = null band.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
-<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a><span class="fu">walk</span>(<span class="fu">seq_along</span>(sig_pcs), \(i) {</span>
-<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(</span>
-<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>    (<span class="fu">plot_loadings</span>(pca6_test, <span class="at">pc_no =</span> i) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">subtitle =</span> <span class="st">"all bootstrap resamples"</span>) <span class="sc">|</span></span>
-<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>       <span class="fu">plot_loadings</span>(pca6_test, <span class="at">pc_no =</span> i, <span class="at">filter_boots =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">subtitle =</span> <span class="st">"filter_boots = TRUE"</span>)) <span class="sc">+</span></span>
-<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">"collect"</span>)</span>
-<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="paper_figures_files/figure-html/pca-loading-plots-1.png" class="img-fluid figure-img" width="1248"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="paper_figures_files/figure-html/pca-loading-plots-2.png" class="img-fluid figure-img" width="1248"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="paper_figures_files/figure-html/pca-loading-plots-3.png" class="img-fluid figure-img" width="1248"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="paper_figures_files/figure-html/pca-loading-plots-4.png" class="img-fluid figure-img" width="1248"></p>
-</figure>
-</div>
-</div>
-</div>
-<p><strong>Reading the stable loadings</strong> (the sign of a component is arbitrary; only the relation between the loadings matters):</p>
-<ul>
-<li><strong>PC1 is a backness (F2) pattern of the <code>æ</code>-type vowels.</strong> Stable loadings: F2 of <code>æ</code>, <code>aː</code> and <code>æːɪ</code>, all with the same sign: speakers who have one of these vowels fronter or backer than others of their age block and gender tend to have the others likewise. F1 of <code>ɑʊ</code> is also stable on PC1 (opposite sign to the F2 loadings), a single extra link that should not be over-read.</li>
-<li><strong>PC2 is a backness (F2) pattern of the <code>ɑ</code>-type vowels.</strong> Stable loadings: F2 of <code>ɑ</code>, <code>ɑɪ</code> and <code>ɑʊ</code>, all with the same sign, and F1 of <code>æ</code> with the opposite sign (speakers with a fronter <code>ɑ</code>-type system tend to have a closer <code>æ</code>). Because PC1 and PC2 are almost equally strong and the bootstrap often mixes them, the cautious statement is that F2 of the <code>æ</code>-type vowels (<code>æ</code>, <code>aː</code>, <code>æːɪ</code>) and F2 of the <code>ɑ</code>-type vowels (<code>ɑ</code>, <code>ɑɪ</code>, <code>ɑʊ</code>) are two partly separable covariation patterns of backness, read as a plane rather than as two exact axes.</li>
-<li><strong>PC3 is a common F1 (height) pattern:</strong> F1 of <code>æːɪ</code>, <code>ɑɪ</code> and <code>ɑ</code> loads with the same sign and is stable (<code>aː</code> has the same sign but is borderline); speakers with a more open realisation in one of these vowels tend to have it in the others. <code>æ</code> and <code>ɑʊ</code> are not part of it.</li>
-<li><strong>PC4 has a single stable loading</strong> (F1 of <code>ɑʊ</code>) and therefore describes no covariation between vowels; it is not interpreted.</li>
-</ul>
-<p><strong>The components in the vowel space.</strong> Following the Model-to-PCA workflow of the <code>nzilbb.vowels</code> package (<code>plot_pc_vs()</code>, Fig. 3.8): each vowel is a dot at its mean position (at the time point used in the PCA), and the arrow shows in which direction and how far the vowel moves when a speaker’s score on the component increases. The arrow is built from the vowel’s F1 and F2 loadings on the component, scaled by the between-speaker standard deviation of each formant (the PCA variables are standardised) and drawn for a score of +2 SD of the component. <strong>Bold arrows</strong> use only the stable loadings (see the stability check above; an unstable formant contributes 0); the <strong>faint arrow</strong> behind it is the full arrow including unstable loadings. A vowel with no bold arrow has no stable loading on that component.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co"># nzilbb.vowels::plot_pc_vs() design (Model-to-PCA workflow, Fig. 3.8), re-implemented because the</span></span>
-<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="co"># package function parses vowel names from ASCII variable names; here with IPA labels and the stability rule.</span></span>
-<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>pc_lab <span class="ot">&lt;-</span> pca6<span class="sc">$</span>variance <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">PC =</span> <span class="fu">as.character</span>(PC)) <span class="sc">|&gt;</span></span>
-<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(PC <span class="sc">%in%</span> <span class="fu">paste0</span>(<span class="st">"PC"</span>, sig_pcs)) <span class="sc">|&gt;</span></span>
-<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(PC, <span class="at">facet =</span> <span class="fu">sprintf</span>(<span class="st">"%s (%s)"</span>, PC, scales<span class="sc">::</span><span class="fu">percent</span>(variance_explained, <span class="fl">0.1</span>)))</span>
-<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a><span class="co"># vowel mean position and between-speaker SD of F1/F2 (the PCA variables are standardised, so</span></span>
-<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a><span class="co"># loading x SD is the displacement of the vowel per one SD of the component)</span></span>
-<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a>vs_means <span class="ot">&lt;-</span> pca6<span class="sc">$</span>points <span class="sc">|&gt;</span> <span class="fu">distinct</span>(speaker, vowel, F1, F2) <span class="sc">|&gt;</span></span>
-<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">F1_m =</span> <span class="fu">mean</span>(F1), <span class="at">F2_m =</span> <span class="fu">mean</span>(F2), <span class="at">F1_sd =</span> <span class="fu">sd</span>(F1), <span class="at">F2_sd =</span> <span class="fu">sd</span>(F2), <span class="at">.by =</span> vowel)</span>
-<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a>vs_arrows <span class="ot">&lt;-</span> pca6<span class="sc">$</span>loadings <span class="sc">|&gt;</span></span>
-<span id="cb59-11"><a href="#cb59-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">starts_with</span>(<span class="st">"PC"</span>), <span class="at">names_to =</span> <span class="st">"PC"</span>, <span class="at">values_to =</span> <span class="st">"loading"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">vowel =</span> <span class="fu">str_remove</span>(var, <span class="st">"^F[12]_"</span>), <span class="at">formant =</span> <span class="fu">str_extract</span>(var, <span class="st">"^F[12]"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb59-13"><a href="#cb59-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(stab <span class="sc">|&gt;</span> <span class="fu">transmute</span>(<span class="at">var =</span> variable, PC, <span class="at">stable =</span> status <span class="sc">==</span> <span class="st">"stable"</span>), <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"var"</span>, <span class="st">"PC"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb59-14"><a href="#cb59-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(PC <span class="sc">%in%</span> <span class="fu">paste0</span>(<span class="st">"PC"</span>, sig_pcs)) <span class="sc">|&gt;</span></span>
-<span id="cb59-15"><a href="#cb59-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> <span class="fu">c</span>(vowel, PC), <span class="at">names_from =</span> formant, <span class="at">values_from =</span> <span class="fu">c</span>(loading, stable)) <span class="sc">|&gt;</span></span>
-<span id="cb59-16"><a href="#cb59-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(vs_means, <span class="at">by =</span> <span class="st">"vowel"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb59-17"><a href="#cb59-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(pc_lab, <span class="at">by =</span> <span class="st">"PC"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb59-18"><a href="#cb59-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(pca6<span class="sc">$</span>points <span class="sc">|&gt;</span> <span class="fu">distinct</span>(speaker, PC, score) <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="at">pc_sd =</span> <span class="fu">sd</span>(score), <span class="at">.by =</span> PC), <span class="at">by =</span> <span class="st">"PC"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb59-19"><a href="#cb59-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">label =</span> pca6<span class="sc">$</span>vowel_labels[vowel],</span>
-<span id="cb59-20"><a href="#cb59-20" aria-hidden="true" tabindex="-1"></a>         <span class="at">k =</span> <span class="dv">2</span> <span class="sc">*</span> pc_sd,   <span class="co"># arrows show the displacement at +2 SD of the component score</span></span>
-<span id="cb59-21"><a href="#cb59-21" aria-hidden="true" tabindex="-1"></a>         <span class="at">F1_end =</span> F1_m <span class="sc">+</span> k <span class="sc">*</span> F1_sd <span class="sc">*</span> loading_F1, <span class="at">F2_end =</span> F2_m <span class="sc">+</span> k <span class="sc">*</span> F2_sd <span class="sc">*</span> loading_F2,</span>
-<span id="cb59-22"><a href="#cb59-22" aria-hidden="true" tabindex="-1"></a>         <span class="co"># arrow built from the stable loadings only (unstable formants set to 0)</span></span>
-<span id="cb59-23"><a href="#cb59-23" aria-hidden="true" tabindex="-1"></a>         <span class="at">F1_end_s =</span> F1_m <span class="sc">+</span> k <span class="sc">*</span> F1_sd <span class="sc">*</span> loading_F1 <span class="sc">*</span> stable_F1, <span class="at">F2_end_s =</span> F2_m <span class="sc">+</span> k <span class="sc">*</span> F2_sd <span class="sc">*</span> loading_F2 <span class="sc">*</span> stable_F2,</span>
-<span id="cb59-24"><a href="#cb59-24" aria-hidden="true" tabindex="-1"></a>         <span class="at">any_stable =</span> stable_F1 <span class="sc">|</span> stable_F2)</span>
-<span id="cb59-25"><a href="#cb59-25" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(vs_arrows, <span class="fu">aes</span>(F2_m, F1_m, <span class="at">colour =</span> label)) <span class="sc">+</span></span>
-<span id="cb59-26"><a href="#cb59-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">xend =</span> F2_end, <span class="at">yend =</span> F1_end), <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="dv">2</span>, <span class="st">"mm"</span>)),</span>
-<span id="cb59-27"><a href="#cb59-27" aria-hidden="true" tabindex="-1"></a>               <span class="at">linewidth =</span> <span class="fl">0.8</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
-<span id="cb59-28"><a href="#cb59-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data =</span> <span class="fu">filter</span>(vs_arrows, any_stable), <span class="fu">aes</span>(<span class="at">xend =</span> F2_end_s, <span class="at">yend =</span> F1_end_s),</span>
-<span id="cb59-29"><a href="#cb59-29" aria-hidden="true" tabindex="-1"></a>               <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="fl">2.5</span>, <span class="st">"mm"</span>)), <span class="at">linewidth =</span> <span class="fl">1.3</span>) <span class="sc">+</span></span>
-<span id="cb59-30"><a href="#cb59-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
-<span id="cb59-31"><a href="#cb59-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_label_repel</span>(<span class="fu">aes</span>(<span class="at">label =</span> label), <span class="at">size =</span> <span class="dv">4</span>, <span class="at">alpha =</span> <span class="fl">0.85</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>, <span class="at">show.legend =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb59-32"><a href="#cb59-32" aria-hidden="true" tabindex="-1"></a>                   <span class="at">label.padding =</span> <span class="fu">unit</span>(<span class="fl">0.12</span>, <span class="st">"lines"</span>), <span class="at">box.padding =</span> <span class="fl">0.5</span>, <span class="at">min.segment.length =</span> <span class="cn">Inf</span>,</span>
-<span id="cb59-33"><a href="#cb59-33" aria-hidden="true" tabindex="-1"></a>                   <span class="at">max.overlaps =</span> <span class="cn">Inf</span>, <span class="at">seed =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb59-34"><a href="#cb59-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_reverse</span>(<span class="at">name =</span> <span class="st">"F2 (Lobanov 2.0 z-score)"</span>, <span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fl">0.12</span>)) <span class="sc">+</span></span>
-<span id="cb59-35"><a href="#cb59-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_reverse</span>(<span class="at">name =</span> <span class="st">"F1 (Lobanov 2.0 z-score)"</span>, <span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fl">0.12</span>)) <span class="sc">+</span></span>
-<span id="cb59-36"><a href="#cb59-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> facet, <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb59-37"><a href="#cb59-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb59-38"><a href="#cb59-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
-<span id="cb59-39"><a href="#cb59-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb59-40"><a href="#cb59-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Principal components of speaker intercepts in the vowel space (age3, six low vowels)"</span>,</span>
-<span id="cb59-41"><a href="#cb59-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="fu">paste0</span>(<span class="st">"Dot = vowel mean; arrow = displacement of the vowel at +2 SD of the component score;</span><span class="sc">\n</span><span class="st">"</span>,</span>
-<span id="cb59-42"><a href="#cb59-42" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"bold = stable loadings, faint = full arrow including unstable loadings.</span><span class="sc">\n</span><span class="st">"</span>,</span>
-<span id="cb59-43"><a href="#cb59-43" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"Diphthongs at their F1 maximum (onset, 18-29%), monophthongs at 50%."</span>)</span>
-<span id="cb59-44"><a href="#cb59-44" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="paper_figures_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="960"></p>
-</figure>
-</div>
-</div>
-</div>
-<p><strong>How to read and interpret the chart.</strong></p>
-<ul>
-<li><strong>One panel = one component</strong> (its share of the variance in the title). <strong>A dot is a vowel’s mean position</strong> in the F1/F2 plane (axes reversed: <em>up</em> = lower F1 = closer vowel, <em>left</em> = higher F2 = fronter vowel).</li>
-<li><strong>An arrow shows what the component does to that vowel</strong>: the direction in which the vowel moves when a speaker’s score on the component goes up (here by 2 SD). Horizontal arrows are F2 (backness) effects, vertical arrows F1 (height) effects, diagonal ones a mixture. The <strong>length</strong> is how far the vowel moves; a vowel with a very short arrow hardly takes part in the component.</li>
-<li><strong>Compare the arrows of different vowels within one panel.</strong> Arrows pointing the <strong>same way</strong> mean that the vowels covary positively across speakers (a speaker who has one vowel further front tends to have the others further front too); <strong>opposite</strong> arrows mean inverse covariation. <strong>The sign of a component is arbitrary</strong>: reversing all arrows of a panel describes the same pattern (low instead of high scores), so only the relation between the arrows is meaningful, not whether they point up or down.</li>
-<li><strong>Bold vs.&nbsp;faint.</strong> Only bold arrows should be interpreted: they use the stable loadings. The faint arrow is what the unstable loadings would add; if it differs strongly from the bold one, that part of the movement is not reliable.</li>
-<li><strong>What is not shown.</strong> The arrows are <em>directions of covariation</em>, not observed speaker positions: the speakers’ own scatter is much larger than the arrows, because a component explains only 12–19% of the between-speaker variance. The panels also describe variation <em>within</em> age block and gender (the intercepts are net of both), they use one time point per vowel (50% for monophthongs, the F1 maximum at 18–29% for diphthongs, i.e.&nbsp;the onset, not the whole glide), and they concern only these six low vowels.</li>
-</ul>
-<p><em>Worked example from the panels above.</em> In <strong>PC1</strong> the bold arrows of <code>æ</code>, <code>aː</code> and <code>æːɪ</code> are horizontal and point the same way: speakers with a backer <code>æ</code> also tend to have a backer <code>aː</code> and <code>æːɪ</code> (and fronter ones likewise); <code>ɑɪ</code> and <code>ɑ</code> have no bold arrow, so the component says nothing about them (<code>ɑʊ</code> has a single vertical one, its F1). In <strong>PC2</strong> the horizontal bold arrows of <code>ɑ</code>, <code>ɑɪ</code> and <code>ɑʊ</code> point the same way, the counterpart for the <code>ɑ</code>-type vowels (plus a vertical arrow for <code>æ</code>); because PC1 and PC2 have nearly equal variance, read them as a plane, not as two exact axes. In <strong>PC3</strong> the stable loadings are F1 of <code>æːɪ</code>, <code>ɑɪ</code> and <code>ɑ</code>: three vertical arrows with the same direction, a shared height tendency (more open or more close realisation across these vowels). In <strong>PC4</strong> the only stable loading is F1 of <code>ɑʊ</code>, so there is nothing to compare it with and the component is not interpreted as covariation between vowels.</p>
-<p><strong>Age direction of each vowel.</strong> Because the intercepts are net of age block, a component is not itself an age axis. To relate the components to the change documented above, the table gives the population old − young effect of each vowel formant at the time point entering the PCA (positive = old speakers have the higher value: F1 higher = more open, F2 higher = more fronted); only effects whose 95% interval excludes zero are shown.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>pca6<span class="sc">$</span>age_check <span class="sc">|&gt;</span></span>
-<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(credible) <span class="sc">|&gt;</span></span>
-<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(<span class="at">Vowel =</span> ipa, <span class="at">Formant =</span> formant, <span class="st">`</span><span class="at">Time point</span><span class="st">`</span> <span class="ot">=</span> scales<span class="sc">::</span><span class="fu">percent</span>(time_prop, <span class="dv">1</span>),</span>
-<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">`</span><span class="at">Old − young</span><span class="st">`</span> <span class="ot">=</span> median, <span class="st">`</span><span class="at">95% low</span><span class="st">`</span> <span class="ot">=</span> lo95, <span class="st">`</span><span class="at">95% high</span><span class="st">`</span> <span class="ot">=</span> hi95) <span class="sc">|&gt;</span></span>
-<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(Vowel, Formant) <span class="sc">|&gt;</span></span>
-<span id="cb60-6"><a href="#cb60-6" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">2</span>, <span class="at">caption =</span> <span class="st">"Credible old − young effects at the PCA time point (Lobanov 2.0 units)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<table class="caption-top table table-sm table-striped small">
-<caption>Credible old − young effects at the PCA time point (Lobanov 2.0 units)</caption>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Vowel</th>
-<th style="text-align: left;">Formant</th>
-<th style="text-align: left;">Time point</th>
-<th style="text-align: right;">Old − young</th>
-<th style="text-align: right;">95% low</th>
-<th style="text-align: right;">95% high</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">aː</td>
-<td style="text-align: left;">F2</td>
-<td style="text-align: left;">50%</td>
-<td style="text-align: right;">0.18</td>
-<td style="text-align: right;">0.14</td>
-<td style="text-align: right;">0.22</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">æ</td>
-<td style="text-align: left;">F1</td>
-<td style="text-align: left;">50%</td>
-<td style="text-align: right;">-0.14</td>
-<td style="text-align: right;">-0.17</td>
-<td style="text-align: right;">-0.10</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">æ</td>
-<td style="text-align: left;">F2</td>
-<td style="text-align: left;">50%</td>
-<td style="text-align: right;">0.10</td>
-<td style="text-align: right;">0.06</td>
-<td style="text-align: right;">0.14</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">æːɪ</td>
-<td style="text-align: left;">F1</td>
-<td style="text-align: left;">29%</td>
-<td style="text-align: right;">-0.13</td>
-<td style="text-align: right;">-0.17</td>
-<td style="text-align: right;">-0.09</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">æːɪ</td>
-<td style="text-align: left;">F2</td>
-<td style="text-align: left;">29%</td>
-<td style="text-align: right;">0.07</td>
-<td style="text-align: right;">0.02</td>
-<td style="text-align: right;">0.12</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">ɑ</td>
-<td style="text-align: left;">F1</td>
-<td style="text-align: left;">50%</td>
-<td style="text-align: right;">0.24</td>
-<td style="text-align: right;">0.21</td>
-<td style="text-align: right;">0.27</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">ɑɪ</td>
-<td style="text-align: left;">F1</td>
-<td style="text-align: left;">28%</td>
-<td style="text-align: right;">0.41</td>
-<td style="text-align: right;">0.36</td>
-<td style="text-align: right;">0.45</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">ɑʊ</td>
-<td style="text-align: left;">F1</td>
-<td style="text-align: left;">18%</td>
-<td style="text-align: right;">0.30</td>
-<td style="text-align: right;">0.24</td>
-<td style="text-align: right;">0.35</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">ɑʊ</td>
-<td style="text-align: left;">F2</td>
-<td style="text-align: left;">18%</td>
-<td style="text-align: right;">0.06</td>
-<td style="text-align: right;">0.02</td>
-<td style="text-align: right;">0.11</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
 </section>
 
 </main>
