@@ -3767,19 +3767,36 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">g1 =</span> F1_old_block <span class="sc">-</span> F1_young_block, <span class="at">g2 =</span> F2_old_block <span class="sc">-</span> F2_young_block) <span class="sc">|&gt;</span></span>
 <span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">gap =</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>(g1<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> g2<span class="sc">^</span><span class="dv">2</span>)), <span class="at">.by =</span> label) <span class="sc">|&gt;</span></span>
 <span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># spread of the speakers' positions in gap units (median over draws); one position unit = the gap, so spread (z) = SD x gap</span></span>
-<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sd_gap =</span> <span class="fu">map_dbl</span>(label, \(v) <span class="fu">median</span>(spd[[v]]<span class="sc">$</span>per_draw<span class="sc">$</span>sd_within)), <span class="at">spread_z =</span> sd_gap <span class="sc">*</span> gap) <span class="sc">|&gt;</span></span>
-<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(gap))</span>
-<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>gap_tbl <span class="sc">|&gt;</span></span>
-<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(<span class="at">Vowel =</span> label, <span class="st">`</span><span class="at">Gap, RMS over 10–90% (z)</span><span class="st">`</span> <span class="ot">=</span> gap, <span class="st">`</span><span class="at">Individual spread (approx., z)</span><span class="st">`</span> <span class="ot">=</span> spread_z) <span class="sc">|&gt;</span></span>
-<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">2</span>, <span class="at">caption =</span> <span class="st">"Size of the old − young change per vowel and spread of individual speakers (ordered by the size of the gap)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sd_gap =</span> <span class="fu">map_dbl</span>(label, \(v) <span class="fu">median</span>(spd[[v]]<span class="sc">$</span>per_draw<span class="sc">$</span>sd_within)), <span class="at">spread_z =</span> sd_gap <span class="sc">*</span> gap,</span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>         <span class="co"># overlap of the old and young speaker distributions: Cohen's d (gap / pooled within-block SD) per draw;</span></span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>         <span class="co"># overlapping coefficient of two normals with equal SD = 2 * pnorm(-|d| / 2); AUC = P(random old speaker is further on the old side than a random young one)</span></span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">d =</span> <span class="fu">map_dbl</span>(label, \(v) <span class="fu">median</span>(spd[[v]]<span class="sc">$</span>per_draw<span class="sc">$</span>cohen_d)),</span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>         <span class="at">auc =</span> <span class="fu">map_dbl</span>(label, \(v) <span class="fu">median</span>(spd[[v]]<span class="sc">$</span>per_draw<span class="sc">$</span>auc)),</span>
+<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a>         <span class="at">overlap =</span> <span class="fu">map_dbl</span>(label, \(v) <span class="fu">median</span>(<span class="dv">2</span> <span class="sc">*</span> <span class="fu">pnorm</span>(<span class="sc">-</span><span class="fu">abs</span>(spd[[v]]<span class="sc">$</span>per_draw<span class="sc">$</span>cohen_d) <span class="sc">/</span> <span class="dv">2</span>)))) <span class="sc">|&gt;</span></span>
+<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(gap))</span>
+<span id="cb46-16"><a href="#cb46-16" aria-hidden="true" tabindex="-1"></a>gap_tbl <span class="sc">|&gt;</span></span>
+<span id="cb46-17"><a href="#cb46-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(<span class="at">Vowel =</span> label, <span class="st">`</span><span class="at">Gap, RMS over 10–90% (z)</span><span class="st">`</span> <span class="ot">=</span> gap, <span class="st">`</span><span class="at">Individual spread (approx., z)</span><span class="st">`</span> <span class="ot">=</span> spread_z,</span>
+<span id="cb46-18"><a href="#cb46-18" aria-hidden="true" tabindex="-1"></a>            <span class="st">`</span><span class="at">Cohen's d</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">abs</span>(d), <span class="st">`</span><span class="at">Overlap of young and old (%)</span><span class="st">`</span> <span class="ot">=</span> <span class="dv">100</span> <span class="sc">*</span> overlap, <span class="st">`</span><span class="at">AUC</span><span class="st">`</span> <span class="ot">=</span> auc) <span class="sc">|&gt;</span></span>
+<span id="cb46-19"><a href="#cb46-19" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">digits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>), <span class="at">caption =</span> <span class="st">"Size of the old − young change per vowel, spread of individual speakers and overlap of the young and old speakers (ordered by the size of the gap). Overlap: shared area of the two speaker distributions (normal approximation from d); AUC: probability that a random old speaker lies further on the old side than a random young speaker (0.5 = no separation, 1 = complete separation)."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
-<caption>Size of the old − young change per vowel and spread of individual speakers (ordered by the size of the gap)</caption>
+<caption>Size of the old − young change per vowel, spread of individual speakers and overlap of the young and old speakers (ordered by the size of the gap). Overlap: shared area of the two speaker distributions (normal approximation from d); AUC: probability that a random old speaker lies further on the old side than a random young speaker (0.5 = no separation, 1 = complete separation).</caption>
+<colgroup>
+<col style="width: 5%">
+<col style="width: 23%">
+<col style="width: 29%">
+<col style="width: 9%">
+<col style="width: 27%">
+<col style="width: 4%">
+</colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Vowel</th>
 <th style="text-align: right;">Gap, RMS over 10–90% (z)</th>
 <th style="text-align: right;">Individual spread (approx., z)</th>
+<th style="text-align: right;">Cohen’s d</th>
+<th style="text-align: right;">Overlap of young and old (%)</th>
+<th style="text-align: right;">AUC</th>
 </tr>
 </thead>
 <tbody>
@@ -3787,61 +3804,97 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td style="text-align: left;">ɜɪ</td>
 <td style="text-align: right;">0.39</td>
 <td style="text-align: right;">0.18</td>
+<td style="text-align: right;">2.1</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">0.93</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">ɑɪ</td>
 <td style="text-align: right;">0.28</td>
 <td style="text-align: right;">0.16</td>
+<td style="text-align: right;">1.8</td>
+<td style="text-align: right;">38</td>
+<td style="text-align: right;">0.90</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">ɑ</td>
 <td style="text-align: right;">0.25</td>
 <td style="text-align: right;">0.16</td>
+<td style="text-align: right;">1.5</td>
+<td style="text-align: right;">44</td>
+<td style="text-align: right;">0.86</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">əʊ</td>
 <td style="text-align: right;">0.22</td>
 <td style="text-align: right;">0.15</td>
+<td style="text-align: right;">1.5</td>
+<td style="text-align: right;">47</td>
+<td style="text-align: right;">0.85</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">ɑʊ</td>
 <td style="text-align: right;">0.20</td>
 <td style="text-align: right;">0.12</td>
+<td style="text-align: right;">1.6</td>
+<td style="text-align: right;">43</td>
+<td style="text-align: right;">0.87</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">aː</td>
 <td style="text-align: right;">0.17</td>
 <td style="text-align: right;">0.22</td>
+<td style="text-align: right;">0.8</td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">0.72</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">æ</td>
 <td style="text-align: right;">0.16</td>
 <td style="text-align: right;">0.19</td>
+<td style="text-align: right;">0.9</td>
+<td style="text-align: right;">67</td>
+<td style="text-align: right;">0.73</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">o</td>
 <td style="text-align: right;">0.15</td>
 <td style="text-align: right;">0.14</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">61</td>
+<td style="text-align: right;">0.77</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">æːɪ</td>
 <td style="text-align: right;">0.14</td>
 <td style="text-align: right;">0.16</td>
+<td style="text-align: right;">0.8</td>
+<td style="text-align: right;">68</td>
+<td style="text-align: right;">0.73</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">oː</td>
 <td style="text-align: right;">0.13</td>
 <td style="text-align: right;">0.16</td>
+<td style="text-align: right;">0.8</td>
+<td style="text-align: right;">69</td>
+<td style="text-align: right;">0.72</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">æːʊ</td>
 <td style="text-align: right;">0.11</td>
 <td style="text-align: right;">0.20</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: right;">78</td>
+<td style="text-align: right;">0.66</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">eː</td>
 <td style="text-align: right;">0.10</td>
 <td style="text-align: right;">0.15</td>
+<td style="text-align: right;">0.7</td>
+<td style="text-align: right;">73</td>
+<td style="text-align: right;">0.69</td>
 </tr>
 </tbody>
 </table>
